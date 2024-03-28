@@ -11,17 +11,10 @@ import com.example.filmosis.init.FirebaseInitializer
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 
-/**
- * Activity que permite cambiar la contraseña del usuario.
- */
+
 class ChangePasswordActivity : AppCompatActivity() {
     private lateinit var btnChangePass : Button
     private lateinit var btnCancel : Button
-    /**
-     * Se realizan todas las inicializaciones
-     *
-     * @param savedInstanceState contiene datos previamente guardado del estado de la actividad
-     * **/
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_change_password)

@@ -3,8 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.NOTIFICATION" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
+    <uses-permission android:name="android.permission.USE_EXACT_ALARM"/>
+
+
 
     <application
         android:allowBackup="true"
@@ -17,9 +23,8 @@
         android:usesCleartextTraffic="true"
         android:theme="@style/Theme.Filmosis"
         tools:targetApi="31">
-        <activity
-            android:name=".ListActivity"
-            android:exported="false" />
+        <receiver android:name=".AlarmNotification"
+            android:enabled="true"/>
         <activity
             android:name=".ChangePasswordOnLogInActivity"
             android:exported="false" />
@@ -44,6 +49,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>

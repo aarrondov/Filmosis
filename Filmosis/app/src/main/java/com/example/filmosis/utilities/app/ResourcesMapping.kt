@@ -2,14 +2,7 @@ package com.example.filmosis.utilities.app
 
 import com.example.filmosis.R
 
-/**
- * Clase singleton que proporciona un mapeo entre los IDs de género y los IDs de recursos de imagen en la aplicación.
- */
 object ResourcesMapping {
-
-    /**
-     * Mapa que asigna los IDs de género a los IDs de recursos de imagen correspondientes.
-     */
     val genreImageMap: Map<Int, Int> = mapOf(
         28 to R.drawable.genre_28,
         12 to R.drawable.genre_12,

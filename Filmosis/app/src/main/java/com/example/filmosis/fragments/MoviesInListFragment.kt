@@ -18,13 +18,6 @@ import com.example.filmosis.adapters.MoviesInListAdapter
 import com.example.filmosis.dataclass.ListedMovie
 import com.example.filmosis.init.FirebaseInitializer
 
-/**
- * Fragmento para mostrar las películas en una lista específica.
- * Permite ver y eliminar películas de la lista.
- *
- * @property firestore Acceso a la instancia de Firestore para interactuar con la base de datos Firebase
- * @property rootView vista raiz del fragmento
- */
 class MoviesInListFragment : Fragment() {
 
     private val firestore = FirebaseInitializer.firestoreInstance
@@ -33,13 +26,6 @@ class MoviesInListFragment : Fragment() {
 
     companion object {
         private const val ARG_LIST_ID = "listId"
-
-        /**
-         * Crea una nueva instancia del fragmento MoviesInListFragment con el ID de lista especificado.
-         *
-         * @param listId El ID de la lista de peliculas.
-         * @return Una instancia de MoviesInListFragment.
-         */
 
         fun newInstance(listId: String): MoviesInListFragment {
             val fragment = MoviesInListFragment()
@@ -54,14 +40,6 @@ class MoviesInListFragment : Fragment() {
         }
     }
 
-    /**
-     * Infla la vista del fragmento
-     *
-     * @param inflater Se utiliza para inflar la vista
-     * @param container El contenedor al que se agrega la visat
-     * @param savedInstanceState Información previamente guardada del fragmento.
-     * @return La vista inflada del fragmento.
-     * **/
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -73,24 +51,10 @@ class MoviesInListFragment : Fragment() {
         return rootView
     }
 
-    /**
-     *Inicia la configuracion del fragmetno
-     *
-     * @param view La vista inflada del fragmento
-     * @param savedInstanceState Información previamente guardada del fragmento, si existe.
-     * **/
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setup()
     }
-
-    /**
-     * Configura la vista del fragmento
-     * verifiva si hay usuario autenticado
-     * inicializa el boton para agregar peliculas
-     * recupera documentos de la lista de peliculas desde Firestore
-     * **/
 
     private fun setup() {
         val currentUserEmail = FirebaseInitializer.authInstance.currentUser?.email
@@ -106,12 +70,6 @@ class MoviesInListFragment : Fragment() {
 
     }
 
-    /**
-     * Recupera el documento de la lista de películas para el usuario especificado desde Firestore.
-     *
-     * @param username El nombre de usuario del usuario cuya lista se va a recuperar.
-     * @param desiredListId El ID de la lista de películas que se desea recuperar.
-     */
     private fun fetchDocument(username: String, desiredListId: String) {
         val docRef = firestore.collection("lists").document(username)
 
@@ -171,11 +129,6 @@ class MoviesInListFragment : Fragment() {
             }
     }
 
-    /**
-     * Inicializa y configura el RecyclerView para mostrar la pelicula de la lista
-     *
-     * @param listedMovies la lista de peliculas
-     * **/
     private fun initRv(listedMovies: MutableList<ListedMovie>){
         rootView?.findViewById<ProgressBar>(R.id.moviesInList_progressCircle)?.visibility = View.GONE
 
@@ -216,20 +169,11 @@ class MoviesInListFragment : Fragment() {
         )
     }
 
-    /**
-     * Inicializa la informacion de la lista en la vista
-     *
-     * @param listName nombre de la lista
-     * @param listDescription La descripcion de la lista
-     * **/
     private fun initListInfo(listName: String, listDescription: String) {
         rootView?.findViewById<TextView>(R.id.moviesInList_listTitle)?.text = listName
         rootView?.findViewById<TextView>(R.id.moviesInList_listDescription)?.text = listDescription
     }
 
-    /**
-     * Inicializa y configura el boton para agregar peliculas
-     * **/
     private fun initAddMovieButton() {
         val addMovieBtn: Button? = rootView?.findViewById(R.id.moviesInList_addMovieBtn)
 
@@ -242,11 +186,6 @@ class MoviesInListFragment : Fragment() {
         }
     }
 
-    /**
-     * Elimina una película de la lista de películas en Firestore.
-     *
-     * @param movieId El ID de la película a eliminar.
-     */
     private fun deleteMovieFromFirestore(movieId: Int) {
         val userEmail = FirebaseInitializer.authInstance.currentUser?.email.toString()
         val listsRef = firestore.collection("lists").document(userEmail)

@@ -23,13 +23,6 @@ import com.example.filmosis.init.FirebaseInitializer
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 
-/**
- * Fragmento para mostrar las listas del usuario
- * permite al usuario crear, ver y eliminar listas
- *
- * @property firestore Acceso a la instancia de Firestore para interactuar con la base de datos Firebase
- * @property rootView vista raiz del fragmento
- * **/
 
 class ListsFragment : Fragment() {
 
@@ -37,14 +30,6 @@ class ListsFragment : Fragment() {
 
     private var rootView: View? = null
 
-    /**
-     * Infla la vista del fragmento
-     *
-     * @param inflater Se utiliza para inflar la vista
-     * @param container El contenedor al que se agrega la visat
-     * @param savedInstanceState Información previamente guardada del fragmento.
-     * @return La vista inflada del fragmento.
-     * **/
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -56,23 +41,11 @@ class ListsFragment : Fragment() {
         return rootView
     }
 
-    /**
-     *Inicia la configuracion del fragmetno
-     *
-     * @param view La vista inflada del fragmento
-     * @param savedInstanceState Información previamente guardada del fragmento, si existe.
-     * **/
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setup()
     }
 
-    /**
-     * Configura la vista del fragmento
-     * Verifica la existencia del usuario
-     * Configura el boton para crear una nueva lista
-     * Si el usuario no esta autenticado, se registrara un mensaje de error
-     * **/
     private fun setup() {
         val username: String? = FirebaseInitializer.authInstance.currentUser?.email
 
@@ -89,12 +62,6 @@ class ListsFragment : Fragment() {
         }
     }
 
-    /**
-     * Obtiene y muestra las listas de las peliculas del usaurio desde Firestore
-     *
-     * @param username el nombre del usaurio actual
-     *
-     * **/
     private fun fetchDocument(username: String) {
         val docRef = firestore.collection("lists").document(username)
         docRef.get()
@@ -140,11 +107,6 @@ class ListsFragment : Fragment() {
             }
     }
 
-    /**
-     * Inicializa y configura el RecyclerView para mostrar las listas de peliculas.
-     *
-     * @param lists La lista de elementos ListItem que representan las listas de peliculas.
-     * **/
     private fun initListsRv(lists: MutableList<ListItem>) {
         val rv = rootView?.findViewById<RecyclerView>(R.id.lists_recyclerView)
         rv?.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
@@ -178,12 +140,6 @@ class ListsFragment : Fragment() {
         )
     }
 
-    /**
-     * Elimina una lista de peliculas de Firestore
-     *
-     * @param listId El id de la lista a eliminar
-     * **/
-
     private fun deleteListFromFirestore(listId: String) {
         val userEmail = FirebaseInitializer.authInstance.currentUser?.email.toString()
         val listsRef = firestore.collection("lists").document(userEmail)
@@ -205,9 +161,6 @@ class ListsFragment : Fragment() {
             }
     }
 
-    /**
-     * Muestra el dialogo para crear una nueva lista
-     * **/
 
     private fun crearLista() {
         val dialog = CreateListFragment()

@@ -22,21 +22,11 @@ import com.google.firebase.firestore.FirebaseFirestore
 import java.util.Calendar
 import java.util.Locale
 
-    /**
-     * Actividad para registrar una nueva cuenta de usuario.
-     *
-     * Permite a los usuarios crear una nueva cuenta proporcionando su correo electrónico, contraseña, nombre de usuario,
-     * nombre y apellidos, y fecha de nacimiento.
-     */
 class SignUpActivity : AppCompatActivity() {
 
     private val firestore: FirebaseFirestore = FirebaseInitializer.firestoreInstance
     private val auth: FirebaseAuth = FirebaseInitializer.authInstance
 
-    /**
-     * Método llamado al crear la actividad.
-     * Configura la interfaz de usuario y establece los listeners para los botones.
-     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
@@ -44,9 +34,6 @@ class SignUpActivity : AppCompatActivity() {
         setup()
     }
 
-        /**
-         * Configura los elementos de la interfaz de usuario y establece los listeners para los botones.
-         */
     private fun setup() {
         val emailEditText: EditText = findViewById(R.id.signUp_emailEditText)
         val passwordEditText: EditText = findViewById(R.id.signUp_passwordEditText)
@@ -126,25 +113,19 @@ class SignUpActivity : AppCompatActivity() {
             datePickerDialog.show()
         }
     }
-        /**
-         * Muestra la pantalla principal de la aplicación.
-         */
+
     private fun showMain() {
         //Intent creado para ir al MainActivity
         val homeIntent = Intent(this, MainActivity::class.java)
         homeIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
         startActivity(homeIntent)
     }
-        /**
-         * Regresa a la pantalla de autenticación.
-         * */
+
     private fun returnToAuthScreen() {
         startActivity(Intent(this, AuthActivity::class.java))
         finish()
     }
-        /**
-         * Guarda los datos del usuario en las preferencias compartidas.
-         */
+
     private fun guardarDatos(email: String, provider: String, username : String, fullname: String) {
         // Guardado de datos
         val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
@@ -155,9 +136,6 @@ class SignUpActivity : AppCompatActivity() {
         prefs.apply()
     }
 
-        /**
-         * Muestra un cuadro de diálogo de alerta con el mensaje de error proporcionado.
-         */
     private fun showAlert(error: String) {
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Error")

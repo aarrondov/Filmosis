@@ -22,13 +22,42 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <ImageButton
-                android:id="@+id/back"
-                style="@style/TransparentBackground"
-                android:layout_width="50dp"
-                android:layout_height="35dp"
-                android:contentDescription="atras"
-                android:src="@drawable/baseline_arrow_back_24" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <ImageButton
+                    android:id="@+id/back"
+                    style="@style/TransparentBackground"
+                    android:layout_width="wrap_content"
+                    android:layout_height="35dp"
+                    android:contentDescription="atras"
+                    android:src="@drawable/baseline_arrow_back_24" />
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <ImageButton
+                    android:id="@+id/notifications"
+                    style="@style/TransparentBackground"
+                    android:layout_width="wrap_content"
+                    android:layout_height="35dp"
+                    android:layout_marginEnd="8dp"
+                    android:contentDescription="notificaciones"
+                    app:layout_constraintEnd_toEndOf="parent" />
+            </LinearLayout>
+
+
+
+
+
+
 
             <WebView
                 android:id="@+id/webView2"
@@ -130,7 +159,7 @@
                                 android:layout_gravity="end"
                                 android:layout_marginLeft="100dp"
                                 android:paddingHorizontal="10dp"
-                                android:text="AÑADIR A LISTA"
+                                android:text="@string/a_adir_a_lista"
                                 android:textAlignment="center"
                                 android:textColor="?attr/colorOnSecondary"
                                 android:textSize="12sp"
@@ -152,7 +181,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="5dp"
-                                android:text="Puntuacion: "
+                                android:text="@string/puntuacion"
                                 android:textColor="?attr/colorOnPrimary" />
 
                             <TextView
@@ -168,7 +197,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="5dp"
                                 android:layout_marginLeft="10dp"
-                                android:text="Popularidad: "
+                                android:text="@string/popularidad"
                                 android:textColor="?attr/colorOnPrimary" />
 
                             <TextView
@@ -212,7 +241,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Genero: "
+                    android:text="@string/genero"
                     android:textColor="?attr/colorOnBackground" />
 
                 <TextView
@@ -244,7 +273,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Censura: "
+                    android:text="@string/censura"
                     android:textColor="?attr/colorOnBackground" />
 
                 <TextView
@@ -274,7 +303,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Idioma: "
+                    android:text="@string/idioma"
                     android:textColor="?attr/colorOnBackground" />
 
                 <TextView
@@ -282,7 +311,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="6dp"
-                    android:text="idimoa"
+                    android:text="idioma"
                     android:textColor="?attr/colorOnBackground"
                     android:textStyle="bold" />
 
@@ -304,7 +333,7 @@
                     style="@style/CustomFontKaiet"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Sinopsis"
+                    android:text="@string/sinopsis"
                     android:textColor="?attr/colorOnBackground"
                     android:textSize="20sp" />
 
@@ -329,7 +358,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/font_kaiet"
-                    android:text="Director"
+                    android:text="@string/director"
                     android:textColor="?attr/colorOnBackground"
                     android:textSize="20sp" />
 
@@ -342,7 +371,9 @@
                         android:id="@+id/recyclerPersonas"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal" />
+                        android:orientation="horizontal"
+                        tools:itemCount="1"
+                        tools:listitem="@layout/row_personas" />
 
 
                 </LinearLayout>
@@ -360,7 +391,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/font_kaiet"
-                        android:text="Reparto"
+                        android:text="@string/reparto"
                         android:textColor="?attr/colorOnBackground"
                         android:textSize="20sp" />
 
@@ -373,7 +404,9 @@
                             android:id="@+id/recyclerActores"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal" />
+                            android:orientation="horizontal"
+                            tools:itemCount="1"
+                            tools:listitem="@layout/row_personas" />
                     </LinearLayout>
                 </LinearLayout>
                 <LinearLayout
@@ -387,21 +420,21 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/font_kaiet"
-                        android:text="Servicios"
+                        android:text="@string/servicios"
                         android:textColor="?attr/colorOnBackground"
                         android:textSize="20sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Subscripcion a streaming"
+                        android:text="@string/suscripcion_a_streaming"
                         android:textStyle="bold"
                         style="@style/CustomFontKaiet"/>
                     <TextView
                         android:id="@+id/textNoDisponible"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="No disponible"
+                        android:text="@string/no_disponible"
                         android:visibility="gone" />
 
                     <LinearLayout
@@ -413,7 +446,8 @@
                             android:id="@+id/recyclerServiciosPeli"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal" />
+                            android:orientation="horizontal"
+                            tools:itemCount="2" />
                     </LinearLayout>
 
                     <TextView
@@ -421,13 +455,13 @@
                         style="@style/CustomFontKaiet"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Alquiler"
+                        android:text="@string/alquiler"
                         android:textStyle="bold"/>
                     <TextView
                         android:id="@+id/textNoDisponibleAlquiler"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="No disponible"
+                        android:text="@string/no_disponible"
                         android:visibility="gone" />
 
                     <LinearLayout
@@ -439,13 +473,15 @@
                             android:id="@+id/recyclerServiciosPeliAlquiler"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal" />
+                            android:orientation="horizontal"
+                            tools:itemCount="1"
+                            tools:listitem="@layout/row_servicio" />
                     </LinearLayout>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Compra"
+                        android:text="@string/compra"
                         android:textStyle="bold"
                         style="@style/CustomFontKaiet"/>
                     <TextView
@@ -464,7 +500,9 @@
                             android:id="@+id/recyclerServiciosPeliComprar"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal" />
+                            android:orientation="horizontal"
+                            tools:itemCount="3"
+                            tools:listitem="@layout/row_servicio" />
                     </LinearLayout>
 
 

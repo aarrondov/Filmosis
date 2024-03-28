@@ -17,13 +17,16 @@ import com.example.filmosis.data.access.tmdb.MoviesAccess
 import com.example.filmosis.data.model.tmdb.Movie
 import com.google.gson.Gson
 
-/**
- * Fragmento para ver todas las peliculas
- * Mostrando peliculas populares, recomendadas y proximas
- * **/
+
 class VerTodoFragment : Fragment() {
     private val moviesAccess = MoviesAccess()
 
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var recyclerViewRecomendados: RecyclerView
+    private lateinit var recyclerViewProximamentes: RecyclerView
+    private lateinit var adapter: GridRecyclerViewAdapter
+
+//    private lateinit var scrollView: ScrollView
 
 
 

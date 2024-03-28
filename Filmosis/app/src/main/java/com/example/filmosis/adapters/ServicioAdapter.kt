@@ -13,13 +13,6 @@ import com.example.filmosis.dataclass.Network
 import com.example.filmosis.dataclass.Servicio
 
 //Clase modificada para que pueda recibir como una lista de Servicio como una lista de NetworkDetails
-/**
- * Adapter para manejar la visualizacion de diferentes elementos en un RecyclerView.
- * Este dapter maneja elementos de tipo Servicio y Network
- *
- * @param items Le pasamos la lista de cualquier clase, en nuestro caso de Servicio o de NetworkDetails
- *
- * **/
 class ServicioAdapter(private val items: List<Any>) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -28,15 +21,6 @@ class ServicioAdapter(private val items: List<Any>) :
         private const val TYPE_NETWORK_DETAILS = 2
     }
 
-    /**
-     * Crea y devuelve un [RecyclerView.ViewHolder] correspondiente al tipo de vista.
-     *
-     * @param parent El ViewGroup al que se añadirá la nueva vista.
-     * @param viewType El tipo de la nueva vista.
-     * @return El nuevo [RecyclerView.ViewHolder] que contiene la vista creada.
-     * @throws IllegalArgumentException Si el viewType no es válido.
-     */
-    
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             TYPE_SERVICIO -> {
@@ -89,16 +73,9 @@ class ServicioAdapter(private val items: List<Any>) :
         }
     }
 
-
-    /**
-     * ViewHolder para los elementos de tipo Network
-     **/
     inner class NetworkDetailsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val name: TextView = itemView.findViewById(R.id.nombre_servicio)
         private val icono: ImageView = itemView.findViewById(R.id.icono_servicio)
-        /**
-         *Metodo para vincular los datos del Network con sus vistas correspondientes
-         **/
         fun bind(networkDetails: Network) {
             val imageUrl = DatosConexion.TMDB_IMAGE_BASE_URL + networkDetails.logo_path
             Glide.with(itemView)

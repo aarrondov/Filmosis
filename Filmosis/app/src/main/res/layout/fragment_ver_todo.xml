@@ -28,7 +28,7 @@
                 style="@style/TransparentBackground"
                 android:layout_width="50dp"
                 android:layout_height="30dp"
-                android:contentDescription="atras"
+                android:contentDescription="@string/atras"
                 android:src="@drawable/baseline_arrow_back_24" />
 
             <LinearLayout
@@ -42,7 +42,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/font_kaiet"
-                    android:text="PELICULAS POPULARES"
+                    android:text="@string/peliculas_populares"
                     android:textColor="?attr/colorOnBackground"
                     android:textSize="16sp" />
 
@@ -65,7 +65,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/font_kaiet"
-                    android:text="PELICULAS RECOMENDADAS"
+                    android:text="@string/peliculas_recomendadas"
                     android:textColor="?attr/colorOnBackground"
                     android:textSize="16sp" />
 
@@ -88,7 +88,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/font_kaiet"
-                    android:text="PROXIMAMENTE"
+                    android:text="@string/pel_prox"
                     android:textColor="?attr/colorOnBackground"
                     android:textSize="16sp" />
 

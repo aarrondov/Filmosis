@@ -1,7 +1,15 @@
 package com.example.filmosis.fragments
+import android.app.AlarmManager
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.*
+import android.widget.Button
 import android.widget.ImageButton
 import android.widget.PopupMenu
 import android.widget.ScrollView
@@ -10,6 +18,8 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.filmosis.AlarmNotification
+import com.example.filmosis.AlarmNotification.Companion.NOTIFICATION_ID
 
 import com.example.filmosis.R
 import com.example.filmosis.adapters.CarouselMoviesAdapter
@@ -20,25 +30,15 @@ import com.example.filmosis.dataclass.Network
 
 import com.example.filmosis.utilities.tmdb.TmdbSearchQueries
 import com.google.android.material.button.MaterialButton
+import java.util.Calendar
+import java.util.Locale
 
 /**
  *Fragmento para la pantalla de inicio de la aplicacio.
  * Dara la bienvenida al usuario que haya iniciado sesion
  * y una lista de peliculas.
- *
- * @property moviesAccess MovieAcceess para obtener los datos de la pelicula a traves de consultas a la API
- * @property rvPopular RecyclerView para las Peliculas populares
- * @property rvUpcoming RecyclerView para las peliculas que saldran proximamente
- * @property rvRecommend RecuclerView para las peliculas recomendadas
- * @property rvServicios RecyclerView para los servicios
- * @property moviesListPopulares Arraylist<Movie> lista para guardar las peliculas populares
- * @property moviesListSoon Arraylist<Movie> lsita para guardar las peliculas que saldran proximamente
- * @property recommendedMovies Arraylist<Movie> lista pra guardar las peliculas recomendadas
- * @property services Arraylist<Movie> Lista para guardar los servicios
- * @property ids Arraylist<Int> para guardar los ids de servicios a mostrar
- **/
-
-
+ * **/
+private const val CHANNEL_ID = "mi_canal_id"
 class HomeFragment : Fragment() {
     private val moviesAccess = MoviesAccess()
 
@@ -56,6 +56,22 @@ class HomeFragment : Fragment() {
         addAll(listOf(49, 213, 2739,18,94,50,2740))
     }
 
+    companion object {
+        const val MY_CHANNEL_ID = "myChannel"
+        const val PERMISSION_REQUEST_CODE = 1001
+    }
+
+
+
+//    private lateinit var tvRecom: TextView
+//    private lateinit var tvProx: TextView
+//    private lateinit var tvPopu: TextView
+
+    val channelID = "filmosis"
+
+    private lateinit var moviesAdapter: CarouselMoviesAdapter
+
+    private lateinit var scrollView: ScrollView
 
     /**
      * Infla la vista del fragmento
@@ -70,7 +86,7 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
+        createChannel()
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
     /**
@@ -83,9 +99,126 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setup(view)
+        val buttonNotify: Button = view.findViewById(R.id.buttonNotify)
+
+
+        buttonNotify.setOnClickListener {
+            scheduleNotification("Título","Descripcion")
+        }
+        // Creando canal
+//        val channelName = "filmosis"
+//
+//        // Construyendo el canal
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            val channel = NotificationChannel(channelID, channelName, NotificationManager.IMPORTANCE_HIGH)
+//            val manager = requireContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+//            manager.createNotificationChannel(channel)
+//
+//            buttonNotify.setOnClickListener {
+//                Log.d("NotificationFragment", "Button clicked")
+//
+//                val notification = NotificationCompat.Builder(requireContext(), channelID).also { n ->
+//                    n.setContentTitle("Notificación")
+//                    n.setContentText("Texto de ejemplo")
+//                    n.setSmallIcon(R.drawable.logofilmosispremium)
+//                }.build()
+//
+//                val notificationManager = NotificationManagerCompat.from(requireContext())
+//                if (ActivityCompat.checkSelfPermission(
+//                        requireContext(),
+//                        Manifest.permission.POST_NOTIFICATIONS
+//                    ) != PackageManager.PERMISSION_GRANTED
+//                ) {
+//                    Log.d("NotificationFragment", "Permission not granted")
+//                    // Solicitar permiso
+//                    val PERMISSION_REQUEST_CODE = 1001
+//                    ActivityCompat.requestPermissions(
+//                        requireActivity(),
+//                        arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+//                        PERMISSION_REQUEST_CODE
+//                    )
+//                } else {
+//                    Log.d("NotificationFragment", "Permission granted")
+//                    // Mostrar notificación
+//                    notificationManager.notify(1, notification)
+//                }
+//            }
+//        }
+
+
     }
+
+    private fun scheduleNotification(titulo: String, descripcion: String) {
+        val intent = Intent(requireContext().applicationContext,AlarmNotification::class.java)
+        intent.putExtra("title",titulo)
+        intent.putExtra("content",descripcion)
+        val pendingIntent = PendingIntent.getBroadcast(
+            requireContext().applicationContext,
+            NOTIFICATION_ID,
+            intent,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+        val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP,Calendar.getInstance().timeInMillis + 7000,pendingIntent)
+        Log.d("Notification","Notification set")
+    }
+
+    fun createChannel(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            val channel = NotificationChannel(
+                MY_CHANNEL_ID,
+                "Filmosis_channel",
+                NotificationManager.IMPORTANCE_HIGH
+            ).apply {
+                description = "Prueba"
+            }
+
+            val notificationManager:NotificationManager = requireContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
+    }
+
+//    fun createSimpleNotification() {
+//        // Crear un Intent para abrir MainActivity y cargar HomeFragment
+//        val intent = Intent(requireContext(), MainActivity::class.java).apply {
+//            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+//        }
+//        val flag = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) PendingIntent.FLAG_IMMUTABLE else 0
+//        Log.d("flag", flag.toString()) //67108864 (FLAG_INMUTABLE)
+//
+//        val pendingIntent: PendingIntent = PendingIntent.getActivity(requireContext(), 0, intent, flag)
+//
+//        val builder = NotificationCompat.Builder(requireContext(), MY_CHANNEL_ID)
+//            .setSmallIcon(R.drawable.logofilmosispremium)
+//            .setContentTitle("My title")
+//            .setContentText("Esto es un ejemplo")
+//            .setStyle(NotificationCompat.BigTextStyle().bigText("Hola que tal Hola que tal Hola que tal Hola que tal Hola que tal Hola que tal Hola que tal Hola que tal Hola que tal "))
+//            .setPriority(NotificationManagerCompat.IMPORTANCE_HIGH)
+//            .setContentIntent(pendingIntent)
+////            .setContentIntent(PendingIntent.getActivity(requireContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)) //FATAL EXCEPTION: main
+////        //Process: com.example.filmosis, PID: 9556
+////        //java.lang.IllegalArgumentException: com.example.filmosis: Targeting S+ (version 31 and above) requires that one of FLAG_IMMUTABLE or FLAG_MUTABLE be specified when creating a PendingIntent.
+////        //Strongly consider using FLAG_IMMUTABLE,
+//
+//        // Mostrar la notificación
+//        with(NotificationManagerCompat.from(requireContext())){
+//            if (ActivityCompat.checkSelfPermission(
+//                    requireContext(),
+//                    Manifest.permission.POST_NOTIFICATIONS
+//                ) != PackageManager.PERMISSION_GRANTED
+//            ) {
+//                ActivityCompat.requestPermissions(
+//                    requireActivity(),
+//                    arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+//                    PERMISSION_REQUEST_CODE
+//                )
+//            }
+//            notify(1, builder.build())
+//        }
+//    }
+
+
+
 
     /**
      * To'do lo que queremos que se visualice sobre el fragmento. La configuracion
@@ -93,6 +226,7 @@ class HomeFragment : Fragment() {
      * **/
 
     private fun setup(view: View) {
+
         val saludoUsuTextView: TextView = view.findViewById(R.id.home_tvUsuario)
 
         val prefs = requireActivity().getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE)
@@ -100,6 +234,8 @@ class HomeFragment : Fragment() {
 
         initSearchViewAndSearchFilter(view)
 
+        val currentLanguage = Locale.getDefault().language
+        Log.d("Idioma", currentLanguage)
         //        scrollView.findViewById<ScrollView>(R.id.scrollViewVerTodo)
 
         saludoUsuTextView.text = "$username"
@@ -311,7 +447,6 @@ class HomeFragment : Fragment() {
                 transaction.commit()
             }
         }
-
     }
     /**
      * Anade las peliculas que saldran proximamente al recycler view
@@ -373,5 +508,7 @@ class HomeFragment : Fragment() {
                 }
             }
         }
+
     }
+
 }

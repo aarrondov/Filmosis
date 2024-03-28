@@ -103,7 +103,7 @@
                 android:iconifiedByDefault="false"
                 android:paddingHorizontal="8dp"
                 android:queryBackground="@null"
-                android:queryHint="Buscar películas"
+                android:queryHint="@string/search_film"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

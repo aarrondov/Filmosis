@@ -7,6 +7,12 @@
     android:id="@+id/homeFragment"
     tools:context=".fragments.HomeFragment">
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/buttonNotify"
+        android:text="Notificarme"/>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -37,7 +43,7 @@
                     android:iconifiedByDefault="false"
                     android:paddingHorizontal="8dp"
                     android:queryBackground="@null"
-                    android:queryHint="Buscar películas" />
+                    android:queryHint="@string/search_film" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <ImageButton

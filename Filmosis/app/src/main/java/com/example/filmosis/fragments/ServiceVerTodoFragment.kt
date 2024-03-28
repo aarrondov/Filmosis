@@ -17,16 +17,6 @@ import com.example.filmosis.adapters.ServicioAdapter
 import com.example.filmosis.data.access.tmdb.MoviesAccess
 import com.example.filmosis.dataclass.Network
 import java.util.Random
-/**
- * Fragmetno para mostrar todos los servicios disponibles
- * Emplea un RecyclerView para mostrar los servicios en un diseno
- * en cuadricula
- * @property recyclerViewservice RecyclerView para los servicios
- * @property adapter  Adaptador para el Recycleriew
- * @property moviesAccess Clase inicializada para recuperar la informacion de las conusltas a la base de datos
- * @property services Arraylist para guardar los servicios
- * @property ids Lista de ids de los servicios, algunos elegidos y otros generados aleatoriamente
- * **/
 
 class ServiceVerTodoFragment : Fragment() {
 
@@ -41,14 +31,6 @@ class ServiceVerTodoFragment : Fragment() {
         addAll(generateRandomNumbers(100))
     }
 
-    /**
-     * Infla la vista del fragmento
-     *
-     * @param inflater Se emplea para inflar la vista
-     * @param container El contenedor al que se pone la vista
-     * @param savedInstanceState informacion previamente guardado del fragmento
-     * @return la vista inflada del fragmento
-     * **/
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -80,17 +62,12 @@ class ServiceVerTodoFragment : Fragment() {
 
         return view
     }
-    /**
-     * Generar lista de numeros aleatorios dentro de un rango
-     * @param count el numero de numeros aleatorios que se generan
-     * @return una lista de numeros aleatorios
-     * **/
 
     private fun generateRandomNumbers(count: Int): List<Int> {
         val random = Random()
         val randomNumbers = mutableListOf<Int>()
         repeat(count) {
-            randomNumbers.add(random.nextInt(10000))
+            randomNumbers.add(random.nextInt(10000)) // Assuming you want numbers up to 10000
         }
         return randomNumbers
     }

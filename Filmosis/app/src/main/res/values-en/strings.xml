@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Filmosis</string>
+    <string name="prefs_file">com.example.filmosis.PREFERENCE_FILE_KEY</string>
+    <string name="page_home">Home</string>
+    <string name="page_explore">Explore</string>
+    <string name="page_user">Profile</string>
+    <string name="page_social">Social</string>
+
+    <string name="genresContainerTitle">Genres</string>
+    <!--    Movie Row Menu-->
+    <string name="movieRowMenu_addToList">Add to List</string>
+    <string name="movieRowMenu_downloadCover">Download Cover</string>
+    <string name="movieRowMenu_shareMovie">Share Movie</string>
+    <!--    Drawer Menu-->
+    <string name="drawerMenu_myLists">My Lists</string>
+
+    <!--    Search Filter Menu-->
+    <string name="searchFilterMenu_searchMovies">Search Movies</string>
+    <string name="searchFilterMenu_searchDirectors">Search People</string>
+
+    <!--    Item person Movie Cast-->
+    <string name="itemPersonMovieCast_CharacterLabel">Character:</string>
+
+    <!--    Person Details Fragment-->
+    <string name="personDetails_biographyTitle">Biography</string>
+    <string name="personDetails_personMoviesRvTitle">Movies</string>
+
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="bienvenido">Welcome back, </string>
+    <string name="search_action">Search</string>
+    <string name="Theme">Theme</string>
+    <string name="pel_culas_populares">Popular Movies</string>
+    <string name="tendencia">Trending This Week</string>
+    <string name="best_rated">Top Rated</string>
+    <string name="popular">Popular</string>
+    <string name="latest">Latest</string>
+    <string name="upcoming">Upcoming</string>
+    <string name="ver_mas">View All</string>
+    <string name="pel_prox">Coming Soon</string>
+    <string name="Actualmente">Currently</string>
+    <string name="servicios">Services</string>
+    <string name="recomendaciones">Recommendations</string>
+    <string name="ver_todo">View All</string>
+    <string name="movie_director_placeholder">Example Director</string>
+    <string name="movie_title_placeholder">Example Title</string>
+    <string name="movie_date_placeholder">1970–01–01</string>
+    <string name="createList_addListTv">Add a List</string>
+    <string name="search_film">Search films</string>
+    <string name="crear_lista">Create list +</string>
+    <string name="t_tulo_de_la_lista">List title</string>
+    <string name="descripci_n_de_la_lista_opcional">List description (optional)</string>
+    <string name="cancelar">CANCEL</string>
+    <string name="guardar">SAVE</string>
+    <string name="a_adir_pel_cula">ADD FILM +</string>
+    <string name="atras">back</string>
+    <string name="peliculas_populares">POPULAR MOVIES</string>
+    <string name="peliculas_recomendadas">RECOMMENDED MOVIES</string>
+    <string name="cambiar_contrase_a">CHANGE PASSWORD</string>
+    <string name="reestablecer_contrase_a">RESET PASSWORD</string>
+    <string name="cerrar_sesi_n">LOG OUT</string>
+    <string name="idioma">Language:</string>
+    <string name="censura">Censor:</string>
+    <string name="genero">Genre:</string>
+    <string name="popularidad">Popularity:</string>
+    <string name="puntuacion">Rating:</string>
+    <string name="a_adir_a_lista">ADD TO LIST</string>
+    <string name="sinopsis">Synopsis</string>
+    <string name="reparto">Cast</string>
+    <string name="suscripcion_a_streaming">Streaming subscription</string>
+    <string name="no_disponible">Unavailable</string>
+    <string name="alquiler">Rent</string>
+    <string name="compra">Buy</string>
+    <string name="not_censor">For all audiences</string>
+    <string name="directora">Director</string>
+    <string name="actriz">Actress</string>
+
+</resources>

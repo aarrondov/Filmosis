@@ -8,20 +8,9 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.example.filmosis.init.FirebaseInitializer
 
-/**
- * Actividad para permitir a los usuarios restablecer su contraseña durante el inicio de sesión.
- * Permite a los usuarios solicitar un restablecimiento de contraseña ingresando su correo electrónico y
- * confirmando su acción mediante un diálogo de confirmación.
- */
-
 class ChangePasswordOnLogInActivity : AppCompatActivity() {
     lateinit var resetPassBtn : Button
     lateinit var backBtn : Button
-
-    /**
-     * Método llamado al crear la actividad.
-     * Configura la interfaz de usuario y establece los listeners para los botones.
-     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_change_password_on_log_in)

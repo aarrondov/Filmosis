@@ -11,11 +11,6 @@ import androidx.core.content.ContextCompat
 
 class CurvedBackgroundView : View {
 
-    /**
-     * Una vista personalizada que representa un fondo con curvas en la parte inferior.
-     * Esta vista dibuja un fondo naranja con curvas blancas en la parte inferior.
-     */
-
     private val backgroundColor = Color.parseColor("#FF9800") // Color de fondo naranja
     val typedValue = TypedValue()
     private val curveColorAttr = context.theme.resolveAttribute(com.google.android.material.R.attr.colorSurface, typedValue, true) // Color de las curvas blanco
@@ -27,9 +22,6 @@ class CurvedBackgroundView : View {
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
-    /**
-     * Método llamado para dibujar la vista en el lienzo especificado.
-     */
     override fun onDraw(canvas: Canvas) {
         if (canvas != null) {
             super.onDraw(canvas)
@@ -40,16 +32,10 @@ class CurvedBackgroundView : View {
         }
     }
 
-    /**
-     * Dibuja el color de fondo naranja en el lienzo.
-     */
     private fun Canvas.drawBackgroundColor() {
         drawColor(backgroundColor)
     }
 
-    /**
-     * Dibuja las curvas blancas en la parte inferior del lienzo.
-     */
     private fun Canvas.drawCurves() {
         paint.color = curveColor
         paint.style = Paint.Style.FILL

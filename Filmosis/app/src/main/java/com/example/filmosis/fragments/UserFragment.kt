@@ -26,29 +26,15 @@ import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import de.hdodenhof.circleimageview.CircleImageView
 
-/**
- * Enumeracion para los diferentes tipos de proveedores de autenticacion
- **/
 enum class ProviderType {
     BASIC,
     GOOGLE
 }
 
-/**
- * Fragmento para mostrar la información del usuario y permitir ciertas acciones como cerrar sesión,
- * cambiar la contraseña y restablecerla.
- *
- * @property profilePic CircleImageView referencia a la imagen de pefil del usuario
- * @property ultimoTiempoRequest almacena el timepo de la ultima solicitud de restablecimiento de contrasena
- */
-
 class UserFragment : Fragment() {
     private lateinit var profilePic : CircleImageView
     private var ultimoTiempoRequest: Long = 0
 
-    /**
-     * Infla la vista del fragmento y la devuelve
-     * **/
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -57,9 +43,6 @@ class UserFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_user, container, false)
     }
 
-    /**
-     * Configura la vista una vez que se ha creado
-     * **/
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -71,11 +54,6 @@ class UserFragment : Fragment() {
         setup(view, email ?: "", provider ?: "",username?:"")
     }
 
-    /**
-     * Configuracion de la vista, muestra la informacion del usuario y configurando los botoness
-     * para acciones como cerrar sesion, cambiar la contrasena , restablecer la contrasena y edita la imagen del perfil
-     *
-     * **/
     private fun setup(view: View, email: String, provider: String,username : String) {
         val fullNameTextView: TextView = view.findViewById(R.id.user_userFullName)
         val emailTextView: TextView = view.findViewById(R.id.emailTextView)
@@ -201,14 +179,6 @@ class UserFragment : Fragment() {
         }
     }
 
-    /**
-     * Método invocado cuando se obtiene un resultado de alguna actividad lanzada para obtener una imagen de la galería.
-     * Se encarga de procesar la imagen seleccionada, mostrarla en la interfaz de usuario y cargarla en Firebase Storage.
-     *
-     * @param requestCode El código de solicitud de la actividad.
-     * @param resultCode El código de resultado de la actividad.
-     * @param data La intención que contiene los datos devueltos por la actividad.
-     */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
@@ -225,12 +195,6 @@ class UserFragment : Fragment() {
         }
     }
 
-    /**
-     * Método que carga una imagen seleccionada por el usuario en Firebase Storage.
-     *
-     * @param imageUri La URI de la imagen seleccionada por el usuario.
-     * @param email El correo electrónico del usuario.
-     */
     private fun uploadImageToFirebaseStorage(imageUri: Uri, email: String) {
         // Obtener una referencia al Storage de Firebase
         val storageReference = FirebaseInitializer.firebaseStorageInstance.reference
@@ -265,18 +229,13 @@ class UserFragment : Fragment() {
     }
 
 
-    /**
-     * Metodo que muestra la actividad de autenticacion
-     * **/
+
     private fun showAuthActivity() {
         val authIntent = Intent(activity, AuthActivity::class.java)
 
         startActivity(authIntent)
     }
 
-    /**
-     * Identificador de solicitud para seleccionar una imagen de la galería.
-     */
     companion object {
         private const val PICK_IMAGE_REQUEST = 1
     }

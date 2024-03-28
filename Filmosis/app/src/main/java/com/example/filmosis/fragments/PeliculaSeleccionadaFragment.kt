@@ -1,6 +1,7 @@
 package com.example.filmosis.fragments
 
 import android.app.AlertDialog
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -11,6 +12,7 @@ import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
 import android.widget.Toast
@@ -30,33 +32,18 @@ import com.example.filmosis.data.model.tmdb.Moviefr
 
 import com.example.filmosis.dataclass.Servicio
 import com.example.filmosis.init.FirebaseInitializer
+import com.example.filmosis.utilities.app.ResourcesMapping
+import com.example.filmosis.utilities.tmdb.TmdbData
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.firestore
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 /**
  * Fragmento par ver la informacion detallada sobre una pelicula
- *
- * @property recyclerView RecyclerView de los directores
- * @property recyclerViewReparto RecyclerView de los actores
- * @property recyclerViewService RecyclerView de los servicios
- * @property recyclerViewServiceAlquiler RecyclerView de los servicios donde la pelicula este en alquiler
- * @property recyclerViewServiceCompra RecyclerView de los servicios donde la pelicula este en compra
- * @property videoView WebView para mostrar el video
- * @property tvCensura TextView para la censura de la pelicula
- * @property tvIdioma TextView para el idioma original de la pelicula
- * @property tvSinopsis TextView para el resumen de la pelicula
- * @property tvTitle TextView para el titulo de la pelicula
- * @property tvReleaseDate TextView para mostrar la fecja de saloda de la pelicula
- * @property tvAvg RatingBar para mostrar la nota media de la pelicula visualmente a traves de estrellas
- * @property tvavg TextView para mostrar la nota media de la pelicula
- * @property tvPupu TextView para mostrar la cantidad de votos sobre una pelicula
- * @property ibBack ImageButton para retroceder
- * @property idioma String para obtener el idioma de la pelicula
- * @property textNodispSubs TextView de no disponible por si no existen plataformas donde subsribirse para la pelicula seleccionada
- * @property textNodispAlq TextView de no disponible por si no existen plataformas donde alquiler  la pelicula seleccionada
- * @property textNodispComp TextView de no disponible por si no existen plataformas donde comprar la pelicula seleccionada
- * @property ma MovieAcceess para obtener los datos de la pelicula a traves de consultas a la API
- * @property recuperacionInfo Movie para obtener los datos de la pelicula seleccionada
- * @property recuperacionInfoGenres MovieFr par obtener los datos de la pelicula seleccionada especificamente los generos de la pelicula
- **/
+ * **/
 class PeliculaSeleccionadaFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var recyclerViewReparto: RecyclerView
@@ -66,24 +53,29 @@ class PeliculaSeleccionadaFragment : Fragment() {
     private lateinit var recyclerViewServiceAlquiler: RecyclerView
     private lateinit var recyclerViewServiceCompra: RecyclerView
     private lateinit var videoView: WebView
+    private lateinit var tvGenero : TextView
     private lateinit var tvCensura : TextView
     private lateinit var tvIdioma : TextView
     private lateinit var tvSinopsis : TextView
     private lateinit var tvTitle : TextView
+    private lateinit var tvTime : TextView
     private lateinit var tvReleaseDate : TextView
-    lateinit var tvAvg : RatingBar
+    private lateinit var tvAvg : RatingBar
+    private lateinit var image : ImageView
     private lateinit var tvavg : TextView
     private lateinit var tvPupu : TextView
     private lateinit var ibBack : ImageButton
+    private var idioma : String = ""
 
     private lateinit var textNodispSubs : TextView
     private lateinit var textNodispAlq : TextView
     private lateinit var textNodispComp : TextView
 
-    private var idioma : String = ""
 
+
+    private var services: HashSet<Servicio> = HashSet()
     private val ma = MoviesAccess()
-    var recuperacionInfo: Movie = Movie(
+    private var recuperacionInfo: Movie = Movie(
         adult = false,
         backdrop_path = "",
         genre_ids = emptyList(),
@@ -175,7 +167,7 @@ class PeliculaSeleccionadaFragment : Fragment() {
      * @param data Datos de la pelicula
      * **/
     private fun addDirectoresToList(context: Context, data: Movie) {
-        ma.getMovieDirectors(data.id) { directors ->
+        ma.getDirectorDetails(data.id) { directors ->
             directors?.let { directorList ->
                 recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
                 recyclerView.adapter = PersonasAdapter(directorList) { directorClicked ->
@@ -210,17 +202,18 @@ class PeliculaSeleccionadaFragment : Fragment() {
                     datosPeliculas(view)
                     video(view)
 
+                    Log.d("fecha", "Fecha de lanzamiento de la película: ${recuperacionInfo.release_date}")
                 }
             }
-            ma.getMovieDataGenres(movieId){movie ->
+            ma.getMovieDataGenres(movieId) { movie ->
                 if (movie != null) {
                     recuperacionInfoGenres = movie
                     view.findViewById<TextView>(R.id.tvGenero).text = obtenerGeneros(recuperacionInfoGenres.genres)
-
                 }
             }
         }
     }
+
 
     /**
      * Configura los Recyclerviews de distintos apartados
@@ -266,7 +259,7 @@ class PeliculaSeleccionadaFragment : Fragment() {
     fun video (view: View){
         videoView = view.findViewById(R.id.webView2)
 
-        ma.getMovieVideo(recuperacionInfo.id) { videoUrl ->
+        ma.getMovieDetails(recuperacionInfo.id) { videoUrl ->
             if (videoUrl != null) {
                 val videoIframe = "<iframe width=\"100%\" height=\"100%\" src=\"$videoUrl\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" allowfullscreen></iframe>"
                 videoView.settings.javaScriptEnabled = true
@@ -290,13 +283,13 @@ class PeliculaSeleccionadaFragment : Fragment() {
      * @param view La vista del fragmento
      **/
 
-    fun datosPeliculas(view: View){
+    private fun datosPeliculas(view: View){
         //Datos de la pelicula
         tvCensura = view.findViewById(R.id.tvCensura)
         if (recuperacionInfo.adult) {
             tvCensura.text = " +18"
         } else {
-            tvCensura.text = " Todos los públicos"
+            tvCensura.text = getString(R.string.not_censor)
         }
         tvIdioma = view.findViewById(R.id.tvLenguage)
 
@@ -334,9 +327,20 @@ class PeliculaSeleccionadaFragment : Fragment() {
             addMovieToList(recuperacionInfo)
         }
 
-
+        // Ocultar la vista de notificaciones si la fecha de lanzamiento es anterior a la actual
+        val releaseDate = recuperacionInfo.release_date
+        if (releaseDate > getCurrentDate()) {
+            view.findViewById<ImageView>(R.id.notifications).setImageResource(R.drawable.baseline_notifications_active_24)
+        }
     }
 
+    /**
+     * Obtiene la fecha actual en el formato "YYYY-MM-DD"
+     */
+    private fun getCurrentDate(): String {
+        val currentDate = Calendar.getInstance().time
+        return SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(currentDate)
+    }
     /**
      * Obtiene los generos de la pelicula y los devuelve como cadena
      * para luego aplicar los generos a la vista
@@ -361,10 +365,10 @@ class PeliculaSeleccionadaFragment : Fragment() {
      * **/
 
     private fun addActoresToList(context: Context, data: Movie) {
-        ma.getMovieActors(data.id) { actores ->
+        ma.getActorDetails(data.id) { actores ->
             actores?.let { actorList ->
                 recyclerViewReparto.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-                recyclerViewReparto.adapter = ActoresAdapter(actorList) { actorClicked ->
+                recyclerViewReparto.adapter = ActoresAdapter(requireContext(),actorList) { actorClicked ->
                     val fragmentManager = requireActivity().supportFragmentManager
                     val transaction = fragmentManager.beginTransaction()
                     transaction.replace(R.id.fragmentContainerView, PersonDetailsFragment.newInstance(actorClicked.id))

@@ -27,29 +27,22 @@ import com.example.filmosis.utilities.firebase.FirestoreImageManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 
-/**
- * Actividad principal de la aplicación.
- *
- * Esta actividad se encarga de gestionar la navegación entre fragmentos, el menú lateral, y la configuración del tema.
- */
 class MainActivity : AppCompatActivity() {
 
-    /**
-     * Método llamado al crear la actividad.
-     * Se configura la interfaz de usuario, se inicializan los fragmentos y se configuran los listeners.
-     *
-     * @param savedInstanceState contiene datos previamente guardado del estado de la actividad
-     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        val fragmentToLoad = intent.getStringExtra("fragment_to_load")
 
+        if (fragmentToLoad != null) {
+            when (fragmentToLoad) {
+                "home" -> replaceFragment(HomeFragment())
+                else -> Log.e("MainActivity", "Fragmento desconocido: $fragmentToLoad")
+            }
+        }
         setup()
     }
 
-    /**
-     * Configura la actividad.
-     */
     private fun setup() {
         initBottomNavigationViewAndFragments()
         initDrawerLayout()
@@ -60,17 +53,11 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.title = null
     }
 
-    /**
-     * Infla el menú de opciones en la barra de herramientas.
-     */
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.options_menu, menu)
         return true
     }
 
-    /**
-     * Gestiona la selección de elementos en el menú de opciones.
-     */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.toolbarMenu_themeMenu -> {
@@ -90,9 +77,6 @@ class MainActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    /**
-     * Verifica si el usuario tiene una foto de perfil y la carga en el menú lateral.
-     */
     private fun checkProfilePic() {
         val drawerNavigationView: NavigationView = findViewById(R.id.main_drawerNavigationView)
 
@@ -129,9 +113,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    /**
-     * Inicializa la barra de navegación inferior y los fragmentos asociados.
-     */
     private fun initBottomNavigationViewAndFragments() {
         val bottomNavigationView: BottomNavigationView = findViewById(R.id.bottomNavigationView)
 
@@ -159,9 +140,6 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    /**
-     * Inicializa el diseño del menú lateral.
-     */
     private fun initDrawerLayout() {
         val drawerLayout : DrawerLayout = findViewById(R.id.main_drawerLayout)
         val drawerLayoutToggleBtn: ImageButton = findViewById(R.id.main_drawerLayoutToggle)
@@ -207,12 +185,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    /**
-     * Reemplaza el fragmento actual por uno nuevo.
-     *
-     * @param fragment El nuevo fragmento a mostrar.
-     * @param tag La etiqueta opcional para identificar el fragmento.
-     */
     private fun replaceFragment(fragment: Fragment, tag : String = "") {
         val fragmentManager: FragmentManager = supportFragmentManager
         val transaction: FragmentTransaction = fragmentManager.beginTransaction()

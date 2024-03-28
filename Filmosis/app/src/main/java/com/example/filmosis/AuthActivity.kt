@@ -20,21 +20,12 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
 
-/**
- * Actividad que gestiona la autenticación de los usuarios.
- *
- * @property firestore Referencia a la instancia de Firestore para acceder a la base de datos de Firebase
- * @property auth Referencia a la instancia de FirebaseAuth para la autenticación de usuarios
- * @property loadingDialog Barra de progreso para mostrar u ocultar según el caso
- * @property startGoogleSignInActivityForResult Indicaciones para realizar cuando la actividad de registro con Google se inicie
- */
 class AuthActivity : AppCompatActivity() {
 
     private val firestore: FirebaseFirestore = FirebaseInitializer.firestoreInstance
     private val auth: FirebaseAuth = FirebaseInitializer.authInstance
     private var loadingDialog: AlertDialog? = null
 
-    // Registro para el inicio de sesión con Google
     private val startGoogleSignInActivityForResult =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
@@ -62,10 +53,7 @@ class AuthActivity : AppCompatActivity() {
         findViewById<ConstraintLayout>(R.id.mainLayout).visibility = View.VISIBLE
     }
 
-    /**
-     * Verifica si ya hay una sesión iniciada, y si es así, redirige a la pantalla principal con los datos de sesión guardados
-     */
-    fun session() {
+    private fun session() {
         val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE)
         val email = prefs.getString("email", null)
         val provider = prefs.getString("provider", null)
@@ -76,9 +64,6 @@ class AuthActivity : AppCompatActivity() {
         }
     }
 
-    /**
-     * Configuración de la actividad e inicialización de componentes como botones.
-     */
     private fun setup() {
         FirebaseApp.initializeApp(this)
 
@@ -95,6 +80,8 @@ class AuthActivity : AppCompatActivity() {
         }
 
         googleSignInButton.setOnClickListener {
+//            showLoadingDialog()
+
             // Configuración
 
             val googleConf = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(getString(R.string.default_web_client_id)).requestEmail().build()
@@ -107,11 +94,6 @@ class AuthActivity : AppCompatActivity() {
         }
     }
 
-    /**
-     * Muestra un cuadro de diálogo de error.
-     *
-     * @param error El error a mostrar
-     */
     private fun showAlert(error: String) {
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Error")
@@ -121,9 +103,22 @@ class AuthActivity : AppCompatActivity() {
         dialog.show()
     }
 
-    /**
-     * Redirige al MainActivity.
-     */
+    private fun showLoadingDialog() {
+        val inflater = layoutInflater
+        val view = inflater.inflate(R.layout.loading_dialog, null)
+
+        loadingDialog = AlertDialog.Builder(this)
+            .setView(view)
+            .setCancelable(false)
+            .create()
+
+        loadingDialog?.show()
+    }
+
+    private fun hideLoadingDialog() {
+        loadingDialog?.dismiss()
+    }
+
     private fun showMain() {
         //Intent creado para ir al MainActivity
         val homeIntent = Intent(this, MainActivity::class.java)
@@ -131,11 +126,6 @@ class AuthActivity : AppCompatActivity() {
         startActivity(homeIntent)
     }
 
-    /**
-     * Autentica al usuario con Firebase usando la credencial de Google.
-     *
-     * @param idToken El token generado por el inicio de sesión con Google-
-     */
     private fun firebaseAuthWithGoogle(idToken: String?) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         auth.signInWithCredential(credential)
@@ -156,14 +146,6 @@ class AuthActivity : AppCompatActivity() {
             }
     }
 
-    /**
-     * Guarda los datos del usuario en SharedPreferences.
-     *
-     * @param email El email del usuario autenticado.
-     * @param provider El proveedor con el que se ha autenticado el usuario.
-     * @param username El nombre de usuario del usuario autenticado.
-     * @param fullname El nombre completo real del usuario autenticado.
-     */
     private fun guardarDatos(email: String, provider: String, username : String, fullname: String) {
         // Guardado de datos
         val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
@@ -173,5 +155,13 @@ class AuthActivity : AppCompatActivity() {
         prefs.putString("fullname", fullname)
         prefs.apply()
     }
+
+//    private fun hashPassword(password: String): String {
+//        // Aquí debes implementar tu lógica de cifrado, por ejemplo utilizando bcrypt o SHA-256
+//        // Esta es solo una implementación de ejemplo utilizando la función de hash SHA-256
+//        val digest = MessageDigest.getInstance("SHA-256")
+//        val encodedHash = digest.digest(password.toByteArray(StandardCharsets.UTF_8))
+//        return Base64.getEncoder().encodeToString(encodedHash)
+//    }
 
 }

@@ -1,6 +1,4 @@
-import org.jetbrains.dokka.DokkaConfiguration
-
-plugins {
+ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.google.gms.google-services")
@@ -36,22 +34,6 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
-    tasks.dokkaHtml.configure {
-        suppressInheritedMembers.set(true)
-    }
-}
-
-tasks.dokkaHtml.configure {
-    dokkaSourceSets {
-        configureEach {
-            // A set of visibility modifiers that should be documented
-            // If set by user, overrides includeNonPublic. Default is PUBLIC
-            documentedVisibilities.set(listOf(DokkaConfiguration.Visibility.PRIVATE) + documentedVisibilities.get())
-
-
-            includeNonPublic.set(true)
-        }
-    }
 }
 
 dependencies {
@@ -60,10 +42,7 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.11.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-    implementation("androidx.test.espresso:espresso-contrib:3.5.1")
-    debugImplementation("androidx.fragment:fragment-testing:1.6.2")
     testImplementation("junit:junit:4.13.2")
-    testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 
@@ -89,7 +68,6 @@ dependencies {
     // Dokka
     // https://github.com/Kotlin/dokka
     dokkaPlugin("org.jetbrains.dokka:android-documentation-plugin:1.9.10")
-
 
     // Glide
     // https://github.com/bumptech/glide
@@ -126,6 +104,5 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     testImplementation("com.google.truth:truth:1.4.2")
     testImplementation("org.mockito:mockito-core:3.12.4")
-    androidTestImplementation("com.google.truth:truth:1.4.2")
 
 }

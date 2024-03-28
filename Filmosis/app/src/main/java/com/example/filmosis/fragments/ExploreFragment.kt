@@ -25,19 +25,6 @@ import com.example.filmosis.data.model.tmdb.Movie
 import com.example.filmosis.utilities.tmdb.TmdbData
 import com.example.filmosis.utilities.tmdb.TmdbSearchQueries
 
-/**
- * Un fragmento que representa la sección de Explorar de la aplicación, permitiendo a los usuarios descubrir películas populares, buscar películas o personas, y filtrar películas según diferentes criterios.
- * Este fragmento utiliza RecyclerViews para mostrar películas populares y listas de películas filtradas.
- *
- * @property rootView La vista raíz del fragmento.
- * @property moviesAccess MoviesAccess para realizar consultas a la API de TMDB sobre datos películas
- * @see MoviesAccess
- *
- * @property trendingMovies ArrayList de Películas para almacenar las películas en tendencia / populares
- * @property filteredMoviesList ArrayList de Peliculas para guardar las películas filtradas cada vez que se aplica un nuevo filtro
- * @property trendingMoviesRecyclerView RecyclerView para mostrar las películas en tendencia / populares
- * @property moviesFilteredRv RecyclerView para mostrar las películas filtradas
- */
 class ExploreFragment : Fragment() {
     private lateinit var rootView: View
 
@@ -62,10 +49,6 @@ class ExploreFragment : Fragment() {
         setup(view)
     }
 
-    /**
-     * Configura los componentes de la vista.
-     * @param view La vista raíz del fragmento.
-     */
     private fun setup(view: View) {
         trendingMoviesRecyclerView = view.findViewById(R.id.explore_trendingMoviesRecyclerView)
         moviesFilteredRv = view.findViewById(R.id.explore_moviesListsRecyclerView)
@@ -79,10 +62,6 @@ class ExploreFragment : Fragment() {
         initFilterMoviesButtons(view)
     }
 
-    /**
-     * Inicializa el SearchView y el filtro de búsqueda.
-     * @param view La vista raíz del fragmento.
-     */
     private fun initSearchViewAndSearchFilter(view: View) {
         val searchView: SearchView = view.findViewById(R.id.explore_searchView)
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -105,11 +84,6 @@ class ExploreFragment : Fragment() {
         }
     }
 
-    /**
-     * Realiza una búsqueda utilizando un tipo de búsqueda y un texto de sugerencia especificados.
-     * @param searchType El tipo de búsqueda.
-     * @param hint El texto de sugerencia para el campo de búsqueda.
-     */
     private fun performSearchWithQueryHint(searchType: TmdbSearchQueries, hint: String) {
         val searchView: SearchView = requireView().findViewById(R.id.explore_searchView)
         searchView.queryHint = hint
@@ -128,10 +102,6 @@ class ExploreFragment : Fragment() {
         })
     }
 
-    /**
-     * Muestra un menú emergente de filtro de búsqueda.
-     * @param anchor La vista que actúa como ancla para el menú emergente.
-     */
     private fun showSearchFilterMenu(anchor: View) {
         val popupMenu = PopupMenu(requireContext(), anchor)
         popupMenu.menuInflater.inflate(R.menu.search_filter_menu, popupMenu.menu)
@@ -153,11 +123,6 @@ class ExploreFragment : Fragment() {
         popupMenu.show()
     }
 
-    /**
-     * Realiza una búsqueda utilizando el tipo de búsqueda y la consulta proporcionados.
-     * @param searchType El tipo de búsqueda.
-     * @param query La consulta de búsqueda.
-     */
     private fun performSearch(searchType: TmdbSearchQueries, query: String) {
         val fragmentManager = requireActivity().supportFragmentManager
         when (searchType) {
@@ -176,9 +141,6 @@ class ExploreFragment : Fragment() {
         }
     }
 
-    /**
-     * Agrega las películas populares al RecyclerView de películas populares.
-     */
     private fun addMoviesTrendingMoviesRv() {
         moviesAccess.listTrendingMovies { result ->
             trendingMovies.clear()
@@ -200,9 +162,6 @@ class ExploreFragment : Fragment() {
         }
     }
 
-    /**
-     * Inicializa las cartas de cada género.
-     */
     private fun initGenreCardViews() {
         val genresRecyclerView: RecyclerView = rootView.findViewById(R.id.explore_genresRecyclerView)
 
@@ -211,12 +170,6 @@ class ExploreFragment : Fragment() {
         genresRecyclerView.layoutManager = GridLayoutManager(requireContext(), 3, LinearLayoutManager.HORIZONTAL, false)
     }
 
-    /**
-     * Resuelve el color del tema.
-     * @param context El contexto de la aplicación.
-     * @param attr El atributo de color a resolver.
-     * @return El color resuelto.
-     */
     private fun resolveThemeColor(context: Context, attr: Int): Int {
         val typedValue = TypedValue()
         val theme = context.theme
@@ -224,10 +177,6 @@ class ExploreFragment : Fragment() {
         return typedValue.data
     }
 
-    /**
-     * Inicializa los botones de filtrado de películas.
-     * @param view La vista raíz del fragmento.
-     */
     private fun initFilterMoviesButtons(view: View) {
         val bestRatedBtn: Button = view.findViewById(R.id.explore_bestRatedBtn)
         val popularBtn: Button = view.findViewById(R.id.explore_popularBtn)
@@ -265,10 +214,6 @@ class ExploreFragment : Fragment() {
         bestRatedBtn.setBackgroundColor(resolveThemeColor(requireContext(), androidx.appcompat.R.attr.colorPrimary))
     }
 
-    /**
-     * Actualiza la lista de películas filtradas.
-     * @param movies La lista de películas obtenidas.
-     */
     private fun updateFilteredMoviesList (movies: List<Movie>) {
 
         movies.forEach { movie ->
@@ -289,9 +234,6 @@ class ExploreFragment : Fragment() {
         moviesFilteredRv.adapter = moviesAdapter
     }
 
-    /**
-     * Inicializa el RecyclerView de películas filtradas con las peliculas populares.
-     */
     private fun initMoviesFilteredRv() {
         moviesAccess.listBestRatedMovies { updateFilteredMoviesList(it) }
     }

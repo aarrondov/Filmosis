@@ -42,7 +42,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="?attr/colorSecondary"
-        android:text="AÑADIR PELÍCULA +"
+        android:text="@string/a_adir_pel_cula"
         android:textColor="?attr/colorOnSecondary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
