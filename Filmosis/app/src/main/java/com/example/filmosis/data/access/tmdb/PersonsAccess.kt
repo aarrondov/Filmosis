@@ -15,7 +15,10 @@ import java.util.Locale
 
 class PersonsAccess {
     fun getPersonCombinedCredits(personId: Int, callback: (List<Cast>) -> Unit) {
-        val call = RetrofitService.tmdbApi.getPersonCombinedCredits(personId, DatosConexion.API_KEY, DatosConexion.REGION)
+        val call = if (Locale.getDefault().language == "es")
+            RetrofitService.tmdbApi.getPersonCombinedCredits(personId, DatosConexion.API_KEY, DatosConexion.REGION)
+        else
+            RetrofitService.tmdbApi.getPersonCombinedCreditsEn(personId, DatosConexion.API_KEY, DatosConexion.REGION)
 
         call.enqueue(object : Callback<CombinedCredits> {
             override fun onFailure(call: Call<CombinedCredits>, t: Throwable) {

@@ -77,5 +77,9 @@
     <string name="not_censor">Todos los públicos</string>
     <string name="directora">Directora</string>
     <string name="actriz">Actriz</string>
+    <string name="no_lista">Todavía no tienes creada ninguna lista.\nCrea una con el botón de abajo.</string>
+    <string name="no_listas_agregar">Todavía no tienes ninguna lista creada.\n\nPara crear una lista, ve a \'Mis listas\' en el menú desplegable superior de la esquina izquierda</string>
+    <string name="accept">ACEPTAR</string>
+    <string name="actor" translatable="false">Actor</string>
 
 </resources>

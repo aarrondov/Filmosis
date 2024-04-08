@@ -24,6 +24,7 @@ import com.example.filmosis.data.model.tmdb.Cast
 import com.example.filmosis.data.model.tmdb.Movie
 import com.example.filmosis.utilities.tmdb.TmdbData
 import com.example.filmosis.utilities.tmdb.TmdbSearchQueries
+import java.util.Locale
 
 class ExploreFragment : Fragment() {
     private lateinit var rootView: View
@@ -165,7 +166,12 @@ class ExploreFragment : Fragment() {
     private fun initGenreCardViews() {
         val genresRecyclerView: RecyclerView = rootView.findViewById(R.id.explore_genresRecyclerView)
 
-        genresRecyclerView.adapter = GenresCardViewsAdapter(TmdbData.movieGenresIds)
+        if (Locale.getDefault().language == "es") {
+            genresRecyclerView.adapter = GenresCardViewsAdapter(TmdbData.movieGenresIds)
+        } else {
+            genresRecyclerView.adapter = GenresCardViewsAdapter(TmdbData.movieGenresIdsEn)
+        }
+
 
         genresRecyclerView.layoutManager = GridLayoutManager(requireContext(), 3, LinearLayoutManager.HORIZONTAL, false)
     }

@@ -2,13 +2,7 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="CalculoEstrellasTest">
-        <State />
-      </entry>
       <entry key="app">
-        <State />
-      </entry>
-      <entry key="testCalculoEstrellas_devuelve_la_calificación_esperada()">
         <State />
       </entry>
     </value>

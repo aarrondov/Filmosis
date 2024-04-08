@@ -18,7 +18,7 @@ import com.example.filmosis.data.access.tmdb.PersonsAccess
 import com.example.filmosis.data.model.tmdb.Cast
 import java.util.Locale
 
-class PersonDetailsFragment : Fragment() {
+class  PersonDetailsFragment : Fragment() {
     private val personsAccess = PersonsAccess()
 
     companion object {
@@ -79,16 +79,16 @@ class PersonDetailsFragment : Fragment() {
             when (it.gender) {
                 1 -> {
                     if (it.known_for_department == "Directing") {
-                        if (Locale.getDefault().language == "es") personDepartment.text = "Directora" else personDepartment.text = "Director"
+                        personDepartment.text = getString(R.string.directora)
                     } else if (it.known_for_department == "Acting") {
-                        if (Locale.getDefault().language == "es") personDepartment.text = "Actriz" else personDepartment.text = "Actress"
+                        personDepartment.text = getString(R.string.actriz)
                     }
                 }
                 else -> {
                     if (it.known_for_department == "Directing") {
-                        personDepartment.text = "Director"
+                        personDepartment.text = getString(R.string.director)
                     } else if (it.known_for_department == "Acting") {
-                        personDepartment.text = "Actor"
+                        personDepartment.text = getString(R.string.actor)
                     }
                 }
             }

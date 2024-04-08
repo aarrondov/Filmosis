@@ -52,11 +52,17 @@ class MoviesAccess {
     }
 
     fun listPopularMoviesWithGenres(genres: List<Int>, callback: (List<Movie>) -> Unit) {
-        val call = RetrofitService.tmdbApi.listPopularMoviesWithGenres(
+        val call =
+            if (Locale.getDefault().language == "es")
+            RetrofitService.tmdbApi.listPopularMoviesWithGenres(
             DatosConexion.API_KEY,
             DatosConexion.REGION,
             genres.joinToString(separator = "||")
-        )
+        ) else RetrofitService.tmdbApi.listPopularMoviesWithGenresEn(
+                DatosConexion.API_KEY,
+                DatosConexion.REGION,
+                genres.joinToString(separator = "||")
+            )
 
         call.enqueue(object : Callback<MoviesPage> {
             override fun onFailure(call: Call<MoviesPage>, t: Throwable) {
@@ -92,7 +98,7 @@ class MoviesAccess {
     }
 
     fun listRecommendedMovies(movieId: Int, callback: (List<Movie>) -> Unit) {
-        val call = RetrofitService.tmdbApi.getRecommendedMovies(movieId, DatosConexion.API_KEY)
+        val call = if (Locale.getDefault().language == "es") RetrofitService.tmdbApi.getRecommendedMovies(movieId, DatosConexion.API_KEY) else RetrofitService.tmdbApi.getRecommendedMoviesEn(movieId, DatosConexion.API_KEY)
 
         call.enqueue(object : Callback<MoviesPage> {
             override fun onFailure(call: Call<MoviesPage>, t: Throwable) {
@@ -111,7 +117,10 @@ class MoviesAccess {
 
     fun searchMovie(query: String, callback: (List<Movie>) -> Unit) {
         val call =
-            RetrofitService.tmdbApi.searchMovie(DatosConexion.API_KEY, DatosConexion.REGION, query)
+            if (Locale.getDefault().language == "es")
+                RetrofitService.tmdbApi.searchMovie(DatosConexion.API_KEY, DatosConexion.REGION, query)
+            else
+                RetrofitService.tmdbApi.searchMovieEn(DatosConexion.API_KEY, DatosConexion.REGION, query)
 
         call.enqueue(object : Callback<MoviesPage> {
             override fun onFailure(call: Call<MoviesPage>, t: Throwable) {
@@ -163,7 +172,10 @@ class MoviesAccess {
 
     fun listTrendingMovies(callback: (List<Movie>) -> Unit) {
         val call =
-            RetrofitService.tmdbApi.listTrendingMovies(DatosConexion.API_KEY, DatosConexion.REGION)
+            if (Locale.getDefault().language == "es")
+                RetrofitService.tmdbApi.listTrendingMovies(DatosConexion.API_KEY, DatosConexion.REGION)
+            else
+                RetrofitService.tmdbApi.listTrendingMoviesEn(DatosConexion.API_KEY, DatosConexion.REGION)
 
         call.enqueue(object : Callback<MoviesPage> {
             override fun onFailure(call: Call<MoviesPage>, t: Throwable) {
@@ -181,11 +193,19 @@ class MoviesAccess {
     }
 
     fun listBestRatedMoviesWithGenres(genres: List<Int>, callback: (List<Movie>) -> Unit) {
-        val call = RetrofitService.tmdbApi.listBestRatedMoviesWithGenres(
-            DatosConexion.API_KEY,
-            DatosConexion.REGION,
-            genres.joinToString(separator = "||")
-        )
+        val call =
+            if (Locale.getDefault().language == "es")
+                RetrofitService.tmdbApi.listBestRatedMoviesWithGenres(
+                    DatosConexion.API_KEY,
+                    DatosConexion.REGION,
+                    genres.joinToString(separator = "||")
+                )
+            else
+                RetrofitService.tmdbApi.listBestRatedMoviesWithGenresEn(
+                    DatosConexion.API_KEY,
+                    DatosConexion.REGION,
+                    genres.joinToString(separator = "||")
+                )
 
         call.enqueue(object : Callback<MoviesPage> {
             override fun onFailure(call: Call<MoviesPage>, t: Throwable) {
@@ -203,10 +223,17 @@ class MoviesAccess {
     }
 
     fun listBestRatedMovies(callback: (List<Movie>) -> Unit) {
-        val call = RetrofitService.tmdbApi.listBestRatedMoves(
-            DatosConexion.API_KEY,
-            DatosConexion.REGION,
-        )
+        val call =
+            if (Locale.getDefault().language == "es")
+                RetrofitService.tmdbApi.listBestRatedMoves(
+                    DatosConexion.API_KEY,
+                    DatosConexion.REGION,
+                )
+            else
+                RetrofitService.tmdbApi.listBestRatedMovesEn(
+                    DatosConexion.API_KEY,
+                    DatosConexion.REGION,
+                )
 
         call.enqueue(object : Callback<MoviesPage> {
             override fun onFailure(call: Call<MoviesPage>, t: Throwable) {
@@ -224,12 +251,21 @@ class MoviesAccess {
     }
 
     fun listLatestMoviesWithGenres(genres: List<Int>, callback: (List<Movie>) -> Unit) {
-        val call = RetrofitService.tmdbApi.listLatestMoviesWithGenres(
-            DatosConexion.API_KEY,
-            DatosConexion.REGION,
-            genres.joinToString(separator = "||"),
-            getCurrentDate()
-        )
+        val call =
+            if (Locale.getDefault().language == "es")
+                RetrofitService.tmdbApi.listLatestMoviesWithGenres(
+                    DatosConexion.API_KEY,
+                    DatosConexion.REGION,
+                    genres.joinToString(separator = "||"),
+                    getCurrentDate()
+                )
+            else
+                RetrofitService.tmdbApi.listLatestMoviesWithGenresEn(
+                    DatosConexion.API_KEY,
+                    DatosConexion.REGION,
+                    genres.joinToString(separator = "||"),
+                    getCurrentDate()
+                )
 
         call.enqueue(object : Callback<MoviesPage> {
             override fun onFailure(call: Call<MoviesPage>, t: Throwable) {
@@ -247,11 +283,20 @@ class MoviesAccess {
     }
 
     fun listLatestMovies(callback: (List<Movie>) -> Unit) {
-        val call = RetrofitService.tmdbApi.listLatestMovies(
-            DatosConexion.API_KEY,
-            DatosConexion.REGION,
-            getCurrentDate()
-        )
+        val call =
+            if (Locale.getDefault().language == "es")
+                RetrofitService.tmdbApi.listLatestMovies(
+                    DatosConexion.API_KEY,
+                    DatosConexion.REGION,
+                    getCurrentDate()
+                )
+            else
+                RetrofitService.tmdbApi.listLatestMoviesEn(
+                    DatosConexion.API_KEY,
+                    DatosConexion.REGION,
+                    getCurrentDate()
+                )
+
 
         call.enqueue(object : Callback<MoviesPage> {
             override fun onFailure(call: Call<MoviesPage>, t: Throwable) {
@@ -345,7 +390,10 @@ class MoviesAccess {
 
 
     fun getDirectorDetails(movieId: Int, callback: (List<Crew>?) -> Unit) {
-        val call = RetrofitService.tmdbApi.getMovieCredits(movieId, DatosConexion.API_KEY)
+        val call = if (Locale.getDefault().language == "es")
+                RetrofitService.tmdbApi.getMovieCredits(movieId, DatosConexion.API_KEY)
+            else
+                RetrofitService.tmdbApi.getMovieCreditsEn(movieId,DatosConexion.API_KEY)
 
         call.enqueue(object : Callback<CreditsResponse> {
             override fun onResponse(
@@ -399,7 +447,8 @@ class MoviesAccess {
     }
 
     fun fetchNetworkDetails(networkId: Int, callback: (Network?) -> Unit) {
-        val call = RetrofitService.tmdbApi.getNetworkDetails(networkId, DatosConexion.API_KEY)
+        val call =
+            RetrofitService.tmdbApi.getNetworkDetails(networkId, DatosConexion.API_KEY)
 
         call.enqueue(object : Callback<Network> {
             override fun onResponse(call: Call<Network>, response: Response<Network>) {
@@ -445,7 +494,6 @@ class MoviesAccess {
 
 
 
-    //Lo necesito para hacer la consulta a la bd
     private fun getCurrentDate(): String {
         val currentDate = LocalDate.now()
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")

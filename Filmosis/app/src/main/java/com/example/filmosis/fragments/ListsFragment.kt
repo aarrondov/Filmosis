@@ -6,13 +6,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
-import android.view.WindowManager
 import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.view.size
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -88,7 +85,10 @@ class ListsFragment : Fragment() {
                         rootView?.findViewById<ProgressBar>(R.id.lists_progressCircle)?.visibility = View.GONE
 
                         if (listOfLists.isEmpty()) {
-                            rootView?.findViewById<TextView>(R.id.lists_errorTextView)?.text = "Todavía no tienes creada ninguna lista.\nCrea una con el botón de abajo."
+                            rootView?.findViewById<TextView>(R.id.lists_errorTextView)?.text =
+                                getString(
+                                    R.string.no_lista
+                                )
                         } else {
                             rootView?.findViewById<TextView>(R.id.lists_errorTextView)?.visibility = View.GONE
                             initListsRv(listOfLists)

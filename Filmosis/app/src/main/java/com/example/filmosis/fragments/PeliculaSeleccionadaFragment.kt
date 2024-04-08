@@ -1,7 +1,6 @@
 package com.example.filmosis.fragments
 
 import android.app.AlertDialog
-import android.content.ContentValues.TAG
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -32,11 +31,6 @@ import com.example.filmosis.data.model.tmdb.Moviefr
 
 import com.example.filmosis.dataclass.Servicio
 import com.example.filmosis.init.FirebaseInitializer
-import com.example.filmosis.utilities.app.ResourcesMapping
-import com.example.filmosis.utilities.tmdb.TmdbData
-import com.google.firebase.Firebase
-import com.google.firebase.firestore.FieldValue
-import com.google.firebase.firestore.firestore
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -480,7 +474,7 @@ class PeliculaSeleccionadaFragment : Fragment() {
 
                 if (listIds.isEmpty()) {
                     builder.setTitle("Aviso")
-                        .setMessage("Todavía no tienes ninguna lista creada.\n\nPara crear una lista, ve a 'Mis listas' en el menú desplegable superior de la esquina izquierda")
+                        .setMessage(getString(R.string.no_listas_agregar))
                         .setNegativeButton("Aceptar") { dialog, _ ->
                             dialog.dismiss()
                         }
@@ -496,12 +490,9 @@ class PeliculaSeleccionadaFragment : Fragment() {
                         }
                 }
                 builder.create().show()
-
-
             }
             .addOnFailureListener { exception ->
                 Log.d("Error", "Error fetching lists: $exception")
-
             }
     }
 

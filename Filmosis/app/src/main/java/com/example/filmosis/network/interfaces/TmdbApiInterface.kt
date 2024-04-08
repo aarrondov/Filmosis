@@ -57,8 +57,21 @@ interface TmdbApiInterface {
         @Query("api_key") apiKey: String
     ): Call<MoviesPage>
 
+    @GET("movie/{movie_id}/recommendations?language=en-US")
+    fun getRecommendedMoviesEn(
+        @Path("movie_id") movieId: Int,
+        @Query("api_key") apiKey: String
+    ): Call<MoviesPage>
+
     @GET("discover/movie?language=es-ES&sort_by=popularity.desc")
     fun listPopularMoviesWithGenres(
+        @Query("api_key") apiKey: String,
+        @Query("region") region: String,
+        @Query("with_genres") genres: String
+    ): Call<MoviesPage>
+
+    @GET("discover/movie?language=en-US&sort_by=popularity.desc")
+    fun listPopularMoviesWithGenresEn(
         @Query("api_key") apiKey: String,
         @Query("region") region: String,
         @Query("with_genres") genres: String
@@ -71,6 +84,12 @@ interface TmdbApiInterface {
         @Query("query") query: String
     ): Call<MoviesPage>
 
+    @GET("search/movie?language=en-US&sort_by=popularity.desc")
+    fun searchMovieEn(
+        @Query("api_key") apiKey: String,
+        @Query("region") region: String,
+        @Query("query") query: String
+    ): Call<MoviesPage>
 
     @GET("movie/{movie_id}?language=es-ES")
     fun getMovieDetails(
@@ -92,6 +111,12 @@ interface TmdbApiInterface {
         @Query("region") region: String,
         @Query("with_genres") genres: String
     ): Call<MoviesPage>
+    @GET("discover/movie?language=en-US&sort_by=vote_average.desc&vote_count.gte=50")
+    fun listBestRatedMoviesWithGenresEn(
+        @Query("api_key") apiKey: String,
+        @Query("region") region: String,
+        @Query("with_genres") genres: String
+    ): Call<MoviesPage>
 
     @GET("discover/movie?include_adult=false&include_video=false&language=es-ES&page=1&sort_by=vote_average.desc&without_genres=99,10755&vote_count.gte=200")
     fun listBestRatedMoves(
@@ -99,8 +124,22 @@ interface TmdbApiInterface {
         @Query("region") region: String
     ): Call<MoviesPage>
 
+    @GET("discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=vote_average.desc&without_genres=99,10755&vote_count.gte=200")
+    fun listBestRatedMovesEn(
+        @Query("api_key") apiKey: String,
+        @Query("region") region: String
+    ): Call<MoviesPage>
+
     @GET("discover/movie?language=es-ES&sort_by=release_date.desc&vote_count.gte=20")
     fun listLatestMoviesWithGenres(
+        @Query("api_key") apiKey: String,
+        @Query("region") region: String,
+        @Query("with_genres") genres: String,
+        @Query("primary_release_date.lte") releaseDateLTE: String // Fecha de lanzamiento menor o igual que
+    ): Call<MoviesPage>
+
+    @GET("discover/movie?language=en-US&sort_by=release_date.desc&vote_count.gte=20")
+    fun listLatestMoviesWithGenresEn(
         @Query("api_key") apiKey: String,
         @Query("region") region: String,
         @Query("with_genres") genres: String,
@@ -114,8 +153,21 @@ interface TmdbApiInterface {
         @Query("primary_release_date.lte") releaseDateLTE: String // Fecha de lanzamiento menor o igual que
     ): Call<MoviesPage>
 
+    @GET("discover/movie?language=en-US&sort_by=release_date.desc&vote_count.gte=20")
+    fun listLatestMoviesEn(
+        @Query("api_key") apiKey: String,
+        @Query("region") region: String,
+        @Query("primary_release_date.lte") releaseDateLTE: String // Fecha de lanzamiento menor o igual que
+    ): Call<MoviesPage>
+
     @GET("trending/movie/week?language=es-ES")
     fun listTrendingMovies(
+        @Query("api_key") apiKey: String,
+        @Query("region") region: String
+    ): Call<MoviesPage>
+
+    @GET("trending/movie/week?language=en-US")
+    fun listTrendingMoviesEn(
         @Query("api_key") apiKey: String,
         @Query("region") region: String
     ): Call<MoviesPage>
@@ -139,6 +191,12 @@ interface TmdbApiInterface {
 
     @GET("movie/{movie_id}/credits?language=es-ES")
     fun getMovieCredits(
+        @Path("movie_id") movieId: Int,
+        @Query("api_key") apiKey: String
+    ): Call<CreditsResponse>
+
+    @GET("movie/{movie_id}/credits?language=es-ES")
+    fun getMovieCreditsEn(
         @Path("movie_id") movieId: Int,
         @Query("api_key") apiKey: String
     ): Call<CreditsResponse>
@@ -198,6 +256,7 @@ interface TmdbApiInterface {
         @Path("id") networkId: Int,
         @Query("api_key") apiKey: String
     ): Call<Network>
+
 
     @GET("movie/{movie_id}/watch/providers")
     fun getStreamingProviders(
