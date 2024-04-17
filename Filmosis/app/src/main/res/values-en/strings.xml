@@ -78,5 +78,6 @@
     <string name="no_lista">You haven\'t created any list yet.\n Create one using the button below.</string>
     <string name="no_listas_agregar">You don\'t have any lists created yet\n\nTo create a list, go to \'My Lists\' in the top left dropdown menu.</string>
     <string name="accept">ACCEPT</string>
+    <string name="accept2">ACCEPT</string>
 
 </resources>
