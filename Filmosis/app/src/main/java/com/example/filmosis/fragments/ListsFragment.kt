@@ -115,7 +115,7 @@ class ListsFragment : Fragment() {
             onListClick = {
                 val fragmentManager = requireActivity().supportFragmentManager
                 val transaction = fragmentManager.beginTransaction()
-                transaction.replace(R.id.fragmentContainerView, MoviesInListFragment.newInstance(it.listId))
+                transaction.replace(R.id.fragmentContainerView, MoviesInListFragment.newInstance(it.listId,"ListsFragment"))
                 transaction.addToBackStack(null)
                 transaction.commit()
             },

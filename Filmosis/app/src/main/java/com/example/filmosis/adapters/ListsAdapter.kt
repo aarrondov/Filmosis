@@ -27,11 +27,16 @@ class ListsAdapter(private val lists: MutableList<ListItem>, private val onListC
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_list, parent, false)
+        val list = lists[0]
+
+        Log.d("ListActivity",list.toString())
         return ListViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
         val list = lists[position]
+
+        Log.d("ListActivity",list.toString())
 
         Glide.with(holder.itemView.context).load(FirestoreImageManager.getTemporaryImageUri()?.toUri()).into(holder.imageView)
         holder.titleTextView.text = list.listTitle

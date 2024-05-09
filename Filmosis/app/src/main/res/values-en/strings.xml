@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Filmosis</string>
-    <string name="prefs_file">com.example.filmosis.PREFERENCE_FILE_KEY</string>
     <string name="page_home">Home</string>
     <string name="page_explore">Explore</string>
     <string name="page_user">Profile</string>
@@ -78,6 +77,9 @@
     <string name="no_lista">You haven\'t created any list yet.\n Create one using the button below.</string>
     <string name="no_listas_agregar">You don\'t have any lists created yet\n\nTo create a list, go to \'My Lists\' in the top left dropdown menu.</string>
     <string name="accept">ACCEPT</string>
-    <string name="accept2">ACCEPT</string>
+    <string name="listas_populares">Popular lists</string>
+    <string name="listas_de_la_comunidad">Community lists</string>
+    <string name="fecha_lanzamiento">"Release date: "</string>
+    <string name="puntuacion_media">"Average vote: "</string>
 
 </resources>

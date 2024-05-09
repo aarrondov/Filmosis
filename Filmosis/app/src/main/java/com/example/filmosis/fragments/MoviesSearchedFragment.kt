@@ -30,14 +30,16 @@ class MoviesSearchedFragment : Fragment() {
         private const val ARG_QUERY = "tmdbQuery"
         private const val ARG_ADD_TO_LIST = "performAddToList"
         private const val ARG_LIST_ID = "listId"
+        private const val ARG_FRAGMENT_PREV = ""
 
-        fun newInstance(query: String, performAddToList: Boolean = false, listId: String = ""): MoviesSearchedFragment {
+        fun newInstance(query: String, performAddToList: Boolean = false, listId: String = "",fragmentPrev: String = ""): MoviesSearchedFragment {
             val fragment = MoviesSearchedFragment()
             val args = Bundle()
 
             args.putString(ARG_QUERY, query)
             args.putBoolean(ARG_ADD_TO_LIST, performAddToList)
             args.putString(ARG_LIST_ID, listId)
+            args.putString(ARG_FRAGMENT_PREV,fragmentPrev)
 
             fragment.arguments = args
             return fragment
@@ -138,9 +140,15 @@ class MoviesSearchedFragment : Fragment() {
         builder.setTitle("Confirmación")
         builder.setMessage("¿Añadir ${movie.title} a la lista?")
             .setPositiveButton("Aceptar") { dialog, id ->
-                listId?.let { addMovieToList(movie, it) }
+                Log.d("MovieInListFragment","Añadiendo linea 143")
+                Log.d("MovieInListFragment arg: ",arguments?.getString(ARG_FRAGMENT_PREV).toString())
+                if (arguments?.getString(ARG_FRAGMENT_PREV) == "ListsFragment"){
+                    listId?.let { addMovieToList(movie, it) }
+                }else {
+                    listId?.let { addMovieToListPopular(movie, it)}
+                }
             }
-            .setNegativeButton("Cancelar") { dialog, id ->
+            .setNegativeButton("Cancelar") { dialog, _ ->
                 dialog.dismiss()
             }
         builder.create().show()
@@ -195,6 +203,49 @@ class MoviesSearchedFragment : Fragment() {
                 Log.d("bruh", "Error fetching lists: $exception")
             }
     }
+
+    private fun addMovieToListPopular(movie: Movie, desiredListId: String) {
+        val listsRef = FirebaseInitializer.firestoreInstance.collection("lists").document("ListasPopulares")
+        Log.d("MovieInListFragment","Añadiendo peli a populares")
+
+        listsRef
+            .get()
+            .addOnSuccessListener { document ->
+                val data = document.data
+
+                data?.forEach { (key, value) ->
+                    val listData = value as? Map<*, *>
+                    val listId = listData?.get("listId").toString()
+
+                    if (listId == desiredListId) {
+                        val moviesList = document.get("lista_$listId.listMovies") as? MutableList<Map<String, Any>>
+
+                        moviesList?.add(
+                            mapOf(
+                                "id" to movie.id,
+                                "title" to movie.title,
+                                "poster_path" to movie.poster_path,
+                                "releaseDate" to movie.release_date,
+                                "averageVote" to movie.vote_average
+                            )
+                        )
+
+                        listsRef.update("lista_$listId.listMovies", moviesList)
+                            .addOnSuccessListener {
+                                requireActivity().onBackPressedDispatcher.onBackPressed()
+                            }
+                            .addOnFailureListener { exception ->
+                                handleAddMovieToListError(exception)
+                            }
+                    }
+                }
+
+            }
+            .addOnFailureListener { exception ->
+                Log.d("bruh", "Error fetching lists: $exception")
+            }
+    }
+
 
     private fun handleAddMovieToListError(exception: Exception) {
         requireActivity().onBackPressedDispatcher.onBackPressed()

@@ -26,12 +26,14 @@ class MoviesInListFragment : Fragment() {
 
     companion object {
         private const val ARG_LIST_ID = "listId"
+        private const val ARG_FRAGMENT_PREV = ""
 
-        fun newInstance(listId: String): MoviesInListFragment {
+        fun newInstance(listId: String,fragmentPrev: String): MoviesInListFragment {
             val fragment = MoviesInListFragment()
             val args = Bundle()
 
             args.putString(ARG_LIST_ID, listId)
+            args.putString(ARG_FRAGMENT_PREV, fragmentPrev)
 
             Log.d("MoviesFragment", listId)
 
@@ -64,10 +66,71 @@ class MoviesInListFragment : Fragment() {
         initAddMovieButton()
 
         if (currentUserEmail != null && listId != null) {
-            fetchDocument(currentUserEmail,listId)
+            if (arguments?.getString(ARG_FRAGMENT_PREV) == "ListsFragment"){
+                fetchDocument(currentUserEmail,listId)
+            }else {
+                fetchDocument(listId)
+            }
         }
+    }
 
+    private fun fetchDocument(desiredListId: String) {
+        val docRef = firestore.collection("lists").document("ListasPopulares")
 
+        docRef.get()
+            .addOnSuccessListener { document ->
+                Log.d("MovieInListFragment", document.toString())
+                if (document.exists()) {
+                    val data = document.data
+                    if (data != null) {
+                        data.forEach { (key, value) ->
+                            val listData = value as? Map<*, *>
+                            val listId = listData?.get("listId").toString()
+                            val listName = listData?.get("listName") as? String
+                            val listDescription = listData?.get("listDescription") as? String
+
+                            if (listId == desiredListId) {
+                                val listMovies = listData?.get("listMovies") as? List<Map<String, Any>>?
+                                val listedMovies = listMovies?.map { movie ->
+                                    val averageVote = movie["averageVote"].toString().toDouble()
+                                    val movieId = movie["id"].toString().toInt()
+                                    val moviePosterPath = movie["poster_path"] as? String ?: ""
+                                    val releaseDate = movie["releaseDate"] as? String ?: ""
+                                    val title = movie["title"] as? String ?: ""
+
+                                    ListedMovie(title, moviePosterPath, releaseDate, averageVote, movieId)
+                                }?.toMutableList()
+
+                                listedMovies?.forEachIndexed { index, listedMovie ->
+                                    Log.d("ListActivity", "  Movie $index:")
+                                    Log.d("ListActivity", "    movieId: ${listedMovie.id}")
+                                    Log.d("ListActivity", "    title: ${listedMovie.title}")
+                                    Log.d("ListActivity", "    releaseDate: ${listedMovie.releaseDate}")
+                                    Log.d("ListActivity", "    averageVote: ${listedMovie.averageVote}")
+                                }
+
+                                // Inicialización de información de lista y recycler view
+
+                                if (listName != null && listDescription != null) {
+                                    initListInfo(listName, listDescription)
+                                }
+
+                                if (listedMovies != null) {
+                                    initRv(listedMovies)
+                                }
+
+                            }
+                        }
+                    } else {
+                        Log.d("ListActivity", "El documento está vacío.")
+                    }
+                } else {
+                    Log.d("ListActivity", "No se encontró ningún documento.")
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.d("ListActivity", "Error al obtener el documento: $exception")
+            }
     }
 
     private fun fetchDocument(username: String, desiredListId: String) {
@@ -154,7 +217,11 @@ class MoviesInListFragment : Fragment() {
                 builder.setMessage("¿Estás seguro de que quieres eliminar ${it.title} de la lista?")
 
                 builder.setPositiveButton("Si") {_, _ ->
-                    deleteMovieFromFirestore(it.id)
+                    if (arguments?.getString(ARG_FRAGMENT_PREV) == "ListsFragment"){
+                        deleteMovieFromFirestore(it.id)
+                    }else {
+                        deleteMovieFromFirestorePopular(it.id)
+                    }
                     val adapter = rv?.adapter as? MoviesInListAdapter
                     adapter?.deleteItemByMovieId(it.id)
                 }
@@ -180,7 +247,8 @@ class MoviesInListFragment : Fragment() {
         addMovieBtn?.setOnClickListener {
             val fragmentManager = requireActivity().supportFragmentManager
             val transaction = fragmentManager.beginTransaction()
-            transaction.replace(R.id.fragmentContainerView, MoviesSearchedFragment.newInstance("", true, arguments?.getString(ARG_LIST_ID).toString()))
+            transaction.replace(R.id.fragmentContainerView, MoviesSearchedFragment.newInstance("", true,arguments?.getString(ARG_LIST_ID).toString(),arguments?.getString(
+                ARG_FRAGMENT_PREV).toString()))
             transaction.addToBackStack(null)
             transaction.commit()
         }
@@ -197,6 +265,43 @@ class MoviesInListFragment : Fragment() {
                 val data = document.data
 
                 data?.forEach { (key, value) ->
+                    val listData = value as? Map<*, *>
+                    val listId = listData?.get("listId").toString()
+
+                    if (listId == desiredListId) {
+                        val moviesList = document.get("lista_$listId.listMovies") as? MutableList<Map<String, Any>>
+                        val movieRemoved = moviesList?.removeIf { it["id"] == movieId.toLong() }
+
+                        if (movieRemoved == true) {
+                            Log.d("bruh", listId)
+                            listsRef.update("lista_$listId.listMovies", moviesList)
+                                .addOnSuccessListener {
+
+                                }
+                                .addOnFailureListener { exception ->
+                                    Toast.makeText(requireContext(), "Error al eliminar la lista: ${exception.message}", Toast.LENGTH_SHORT).show()
+                                }
+                        }
+
+                    }
+                }
+
+            }
+            .addOnFailureListener { exception ->
+                Log.d("bruh", "Error fetching lists: $exception")
+            }
+    }
+
+    private fun deleteMovieFromFirestorePopular(movieId: Int) {
+        val listsRef = firestore.collection("lists").document("ListasPopulares")
+        val desiredListId = arguments?.getString(ARG_LIST_ID)
+
+        listsRef
+            .get()
+            .addOnSuccessListener { document ->
+                val data = document.data
+
+                data?.forEach { (_, value) ->
                     val listData = value as? Map<*, *>
                     val listId = listData?.get("listId").toString()
 

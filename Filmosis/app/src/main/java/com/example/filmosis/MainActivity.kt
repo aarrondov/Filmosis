@@ -21,6 +21,7 @@ import com.bumptech.glide.Glide
 import com.example.filmosis.fragments.ExploreFragment
 import com.example.filmosis.fragments.HomeFragment
 import com.example.filmosis.fragments.ListsFragment
+import com.example.filmosis.fragments.PopularListsFragment
 import com.example.filmosis.fragments.UserFragment
 import com.example.filmosis.init.FirebaseInitializer
 import com.example.filmosis.utilities.firebase.FirestoreImageManager
@@ -177,12 +178,20 @@ class MainActivity : AppCompatActivity() {
                     drawerLayout.close()
                     return@setNavigationItemSelectedListener true
                 }
-
+                R.id.drawerMenu_popularLists -> {
+                    val currentFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView)
+                    if (currentFragment?.tag != "POPULAR_LISTS_FRAGMENT") {
+                        replaceFragment(PopularListsFragment(),"POPULAR_LISTS_FRAGMENT")
+                    }
+                    drawerLayout.close()
+                    return@setNavigationItemSelectedListener true
+                }
                 else -> {
                     return@setNavigationItemSelectedListener true
                 }
             }
         }
+
     }
 
     private fun replaceFragment(fragment: Fragment, tag : String = "") {

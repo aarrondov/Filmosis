@@ -11,7 +11,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/buttonNotify"
-        android:text="Notificarme"/>
+        android:text="Notificarme"
+        android:visibility="invisible"/>
 
     <ScrollView
         android:layout_width="match_parent"

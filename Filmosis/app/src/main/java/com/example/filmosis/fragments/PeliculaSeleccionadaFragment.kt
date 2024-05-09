@@ -2,6 +2,7 @@ package com.example.filmosis.fragments
 
 import android.app.AlertDialog
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -54,7 +55,7 @@ class PeliculaSeleccionadaFragment : Fragment() {
     private lateinit var tvTitle : TextView
     private lateinit var tvTime : TextView
     private lateinit var tvReleaseDate : TextView
-    private lateinit var tvAvg : RatingBar
+    lateinit var tvAvg : RatingBar
     private lateinit var image : ImageView
     private lateinit var tvavg : TextView
     private lateinit var tvPupu : TextView
@@ -64,6 +65,7 @@ class PeliculaSeleccionadaFragment : Fragment() {
     private lateinit var textNodispSubs : TextView
     private lateinit var textNodispAlq : TextView
     private lateinit var textNodispComp : TextView
+    private lateinit var shareFilm: ImageView
 
 
 
@@ -103,9 +105,6 @@ class PeliculaSeleccionadaFragment : Fragment() {
         vote_count = 0,
         spoken_languages = emptyList()
     )
-
-
-
 
     companion object {
         private const val ARG_MOVIE_ID = "movieId"
@@ -321,11 +320,46 @@ class PeliculaSeleccionadaFragment : Fragment() {
             addMovieToList(recuperacionInfo)
         }
 
+
+
         // Ocultar la vista de notificaciones si la fecha de lanzamiento es anterior a la actual
         val releaseDate = recuperacionInfo.release_date
         if (releaseDate > getCurrentDate()) {
             view.findViewById<ImageView>(R.id.notifications).setImageResource(R.drawable.baseline_notifications_active_24)
         }
+        shareFilm = view.findViewById(R.id.shareMovie)
+        shareFilm.setOnClickListener {
+            var textoCompartir = "Watch " + recuperacionInfo.title
+            if (recuperacionInfo.video){
+                ma.getMovieDetails(recuperacionInfo.id) { videoUrl ->
+                    if (videoUrl != null) {
+                        textoCompartir += ". Here is the trailer: $videoUrl"
+                    }
+                }
+            }else {
+                Log.d("SelectedMovie","No se ha encontrado video")
+            }
+            textoCompartir += "! Shared using Filmosis, download it now."
+            if (Locale.getDefault().language == "es"){
+                textoCompartir = "¡Echa un vistazo a " + recuperacionInfo.title
+                if (recuperacionInfo.video){
+                    ma.getMovieDetails(recuperacionInfo.id) { videoUrl ->
+                        if (videoUrl != null) {
+                            textoCompartir += ". Aquí está el trailer: $videoUrl"
+                        }
+                    }
+                }
+                textoCompartir += ". Compartido a través de Filmosis. ¡Descárgala ya en la Play Store!"
+            }
+            compartirTexto(textoCompartir)
+        }
+    }
+
+    private fun compartirTexto(texto: String) {
+        val intent = Intent(Intent.ACTION_SEND)
+        intent.type = "text/plain"
+        intent.putExtra(Intent.EXTRA_TEXT, texto)
+        startActivity(Intent.createChooser(intent, "Compartir con"))
     }
 
     /**

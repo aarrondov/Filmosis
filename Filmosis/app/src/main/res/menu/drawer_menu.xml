@@ -5,4 +5,9 @@
         android:id="@+id/drawerMenu_myLists"
         android:icon="@drawable/ic_movie_creation_24"
         android:title="@string/drawerMenu_myLists" />
+
+    <item
+        android:id="@+id/drawerMenu_popularLists"
+        android:icon="@drawable/ic_movie_creation_24"
+        android:title="@string/listas_populares" />
 </menu>

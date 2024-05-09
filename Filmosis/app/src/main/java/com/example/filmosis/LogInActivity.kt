@@ -3,6 +3,7 @@ package com.example.filmosis
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -35,52 +36,56 @@ class LogInActivity : AppCompatActivity() {
         logInBtn.setOnClickListener {
             if (usernameEditText.text.isNotEmpty() && passwordEditText.text.isNotEmpty()) {
                 val username = usernameEditText.text.toString()
-                //Consultamos a nuestra base de datos si existe algun usuario con el nombre introducido
 
-                val userReferencia = firestore.collection("users")//cogemos la tabla de users
+                val userReference = firestore.collection("users")
 
-                userReferencia.whereEqualTo("name", username)//comparamos si existe el nombre de ususario
-                    .get().addOnSuccessListener { documents ->//Si si existen que ejecute el resto de codigo
-                        if(!documents.isEmpty){
-                            // si ha encontrado un usuario con emai y nombre de usuario correspondiente que siga
-                            // cogemos el email asociado con el nombre de usuario introducido en la coleccion de la db
-                            var userEmail = ""
-                            var userFullName = ""
-                            for (document in documents){
-                                userEmail = document.getString("email").toString()
-                                userFullName = document.getString("fullName").toString()
+                userReference.whereEqualTo("username", username)
+                    .get()
+                    .addOnSuccessListener { documents ->
+                        if (!documents.isEmpty) {
+                            var userUid = ""
+                            for (document in documents) {
+                                userUid = document.getString("uid").toString()
                             }
 
-                            if (!userEmail.isNullOrBlank()) {
-                                FirebaseAuth.getInstance().signInWithEmailAndPassword(userEmail, passwordEditText.text.toString()).addOnCompleteListener { task ->
-                                    if (task.isSuccessful) {// Anadimos a la base de datos si to'do sale bien
-                                        guardarDatos(userEmail, ProviderType.BASIC.toString(), username, userFullName)
-                                        showMain()
-                                    } else {
-                                        if (task.exception is FirebaseAuthInvalidCredentialsException) {
-                                            showAlert("Nombre de usuario o contraseña incorrectos.")
+                            if (!userUid.isNullOrBlank()) {
+                                Log.d("Login", "UID del usuario: $userUid")
+
+                                FirebaseAuth.getInstance().signInWithEmailAndPassword(userUid, passwordEditText.text.toString())
+                                    .addOnCompleteListener { task ->
+                                        if (task.isSuccessful) {
+                                            Log.d("Login", "Inicio de sesión exitoso")
+                                            showMain()
                                         } else {
-                                            showAlert(task.exception.toString())
+                                            if (task.exception is FirebaseAuthInvalidCredentialsException) {
+                                                Log.e("Login", task.exception.toString())
+                                                showAlert("Nombre de usuario o contraseña incorrectos.")
+                                            } else {
+                                                Log.e("Login", "Error al iniciar sesión: ${task.exception?.message}")
+                                                showAlert("Error al iniciar sesión: ${task.exception?.message}")
+                                            }
                                         }
                                     }
-                                }
                             } else {
-                                // Alert de debug... no debería estar en release
-                                showAlert("Error al obtener el email del usuario.")
+                                Log.e("Login", "Error al obtener UID del usuario")
+                                showAlert("Error al obtener información del usuario.")
                             }
                         } else {
-                            // No se ha encontrado el usuario con el nombre introducido...
+                            Log.d("Login", "Usuario no encontrado")
                             showAlert("Nombre de usuario o contraseña incorrectos.")
                         }
                     }
-                    .addOnFailureListener { exception -> //en caso que haya dado error
+                    .addOnFailureListener { exception ->
+                        Log.e("Login", "Error al verificar las credenciales: ${exception.message}")
                         showAlert("Error al verificar las credenciales: ${exception.message}")
                     }
-
             } else {
                 showAlert("Rellena todos los campos por favor")
             }
         }
+
+
+
 
         returnButton.setOnClickListener {
             returnToAuthScreen()

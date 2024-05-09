@@ -69,8 +69,8 @@ class ListedMoviesAdapter(private val movies: List<Movie>, private val onMovieCl
 
         holder.movieGenres.text = genresString.joinToString(", ")
 
-        holder.movieDate.text = "Fecha de salida: ${movie.release_date}"
-        holder.movieVoteAverage.text = "Puntuación media: ${movie.vote_average}"
+        holder.movieDate.text = holder.itemView.context.getString(R.string.fecha_lanzamiento) + movie.release_date
+        holder.movieVoteAverage.text = holder.itemView.context.getString(R.string.puntuacion_media) + movie.vote_average
 
         holder.itemView.setOnClickListener {onMovieClick.invoke(movie)}
     }

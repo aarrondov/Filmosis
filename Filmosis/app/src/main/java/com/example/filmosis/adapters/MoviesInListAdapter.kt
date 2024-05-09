@@ -88,8 +88,9 @@ class MoviesInListAdapter(private val movies: MutableList<ListedMovie>, private 
 
         holder.movieName.text = movie.title
 
-        holder.movieDate.text = "Fecha de salida: ${movie.releaseDate}"
-        holder.movieVoteAverage.text = "Puntuación media: ${movie.averageVote}"
+        holder.movieVoteAverage.text = holder.itemView.context.getString(R.string.puntuacion_media) + movie.releaseDate
+        holder.movieDate.text = holder.itemView.context.getString(R.string.fecha_lanzamiento) + movie.releaseDate
+
 
         holder.itemView.setOnClickListener {
             onMovieClick.invoke(movie)

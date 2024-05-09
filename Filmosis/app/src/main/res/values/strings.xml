@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Filmosis</string>
-    <string name="prefs_file">com.example.filmosis.PREFERENCE_FILE_KEY</string>
+    <string name="prefs_file" translatable="false">com.example.filmosis.PREFERENCE_FILE_KEY</string>
     <string name="default_web_client_id" translatable="false">383558741656-j89oaq4etmfpkg6s4pocgt12rl4s3bgn.apps.googleusercontent.com</string>
     <string name="page_home">Inicio</string>
     <string name="page_explore">Explorar</string>
@@ -55,7 +55,7 @@
     <string name="cancelar">CANCELAR</string>
     <string name="guardar">GUARDAR</string>
     <string name="a_adir_pel_cula">AÑADIR PELÍCULA +</string>
-    <string name="atras">atras</string>
+    <string name="atras">atrás</string>
     <string name="peliculas_populares">PELICULAS POPULARES</string>
     <string name="peliculas_recomendadas">PELICULAS RECOMENDADAS</string>
     <string name="cambiar_contrase_a">CAMBIAR CONTRASEÑA</string>
@@ -81,5 +81,9 @@
     <string name="no_listas_agregar">Todavía no tienes ninguna lista creada.\n\nPara crear una lista, ve a \'Mis listas\' en el menú desplegable superior de la esquina izquierda</string>
     <string name="accept">ACEPTAR</string>
     <string name="actor" translatable="false">Actor</string>
+    <string name="listas_populares">Listas populares</string>
+    <string name="listas_de_la_comunidad">Listas de la comunidad</string>
+    <string name="fecha_lanzamiento">"Fecha de lanzamiento: "</string>
+    <string name="puntuacion_media">"Puntuación media: "</string>
 
 </resources>
