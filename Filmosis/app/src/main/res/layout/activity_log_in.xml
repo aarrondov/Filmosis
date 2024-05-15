@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             android:backgroundTint="?attr/colorOnBackground"
             android:ems="10"
-            android:hint="Nombre de usuario"
+            android:hint="@string/email"
             android:inputType="textEmailAddress"
             android:textColor="?attr/colorOnBackground"
             android:textCursorDrawable="@null" />
@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:backgroundTint="?attr/colorOnBackground"
             android:ems="10"
-            android:hint="Contraseña"
+            android:hint="@string/password"
             android:inputType="textPassword"
             android:textColor="?attr/colorOnBackground"
             android:textCursorDrawable="@null" />

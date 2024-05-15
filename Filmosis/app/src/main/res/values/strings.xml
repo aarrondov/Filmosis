@@ -85,5 +85,7 @@
     <string name="listas_de_la_comunidad">Listas de la comunidad</string>
     <string name="fecha_lanzamiento">"Fecha de lanzamiento: "</string>
     <string name="puntuacion_media">"Puntuación media: "</string>
+    <string name="email">Correo</string>
+    <string name="password">Contraseña</string>
 
 </resources>

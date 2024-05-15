@@ -25,7 +25,7 @@ object FirestoreUtilities {
                 "birthDate" to birthDate
             )
 
-            firestore.collection("users").document(username) // Utilizar el nombre de usuario como clave
+            firestore.collection("users").document(email) // Utilizar el nombre de usuario como clave
                 .set(userData)
                 .addOnSuccessListener {
                     callback(true)

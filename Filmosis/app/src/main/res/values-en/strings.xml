@@ -81,5 +81,7 @@
     <string name="listas_de_la_comunidad">Community lists</string>
     <string name="fecha_lanzamiento">"Release date: "</string>
     <string name="puntuacion_media">"Average vote: "</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
 
 </resources>

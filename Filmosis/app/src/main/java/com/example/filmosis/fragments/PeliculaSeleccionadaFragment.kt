@@ -1,9 +1,16 @@
 package com.example.filmosis.fragments
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Canvas
+import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -32,6 +39,7 @@ import com.example.filmosis.data.model.tmdb.Moviefr
 
 import com.example.filmosis.dataclass.Servicio
 import com.example.filmosis.init.FirebaseInitializer
+import java.io.ByteArrayOutputStream
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -352,7 +360,22 @@ class PeliculaSeleccionadaFragment : Fragment() {
                 textoCompartir += ". Compartido a través de Filmosis. ¡Descárgala ya en la Play Store!"
             }
             compartirTexto(textoCompartir)
+
         }
+    }
+
+    private fun shareImage() {
+        TODO("Not yet implemented")
+    }
+
+    @SuppressLint("ResourceAsColor")
+    private fun getBitmapFromView(view: View) : Bitmap{
+        val returnedBitmap : Bitmap = Bitmap.createBitmap(view.width,view.height,Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(returnedBitmap)
+        val bgDrawable: Drawable = view.background
+        bgDrawable.draw(canvas)
+        view.draw(canvas);
+        return returnedBitmap;
     }
 
     private fun compartirTexto(texto: String) {

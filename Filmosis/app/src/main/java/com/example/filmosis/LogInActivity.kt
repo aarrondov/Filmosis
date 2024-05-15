@@ -35,54 +35,53 @@ class LogInActivity : AppCompatActivity() {
 
         logInBtn.setOnClickListener {
             if (usernameEditText.text.isNotEmpty() && passwordEditText.text.isNotEmpty()) {
-                val username = usernameEditText.text.toString()
+                val email = usernameEditText.text.toString()
+                val password = passwordEditText.text.toString()
 
-                val userReference = firestore.collection("users")
+                FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            val docRef = firestore.collection("lists").document("ListasPopulares")
+                            docRef.get()
+                                .addOnSuccessListener { documentSnapshot ->
+                                    if (documentSnapshot.exists()) {
+                                        val userData = documentSnapshot.data
+                                        val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
 
-                userReference.whereEqualTo("username", username)
-                    .get()
-                    .addOnSuccessListener { documents ->
-                        if (!documents.isEmpty) {
-                            var userUid = ""
-                            for (document in documents) {
-                                userUid = document.getString("uid").toString()
-                            }
-
-                            if (!userUid.isNullOrBlank()) {
-                                Log.d("Login", "UID del usuario: $userUid")
-
-                                FirebaseAuth.getInstance().signInWithEmailAndPassword(userUid, passwordEditText.text.toString())
-                                    .addOnCompleteListener { task ->
-                                        if (task.isSuccessful) {
-                                            Log.d("Login", "Inicio de sesión exitoso")
-                                            showMain()
-                                        } else {
-                                            if (task.exception is FirebaseAuthInvalidCredentialsException) {
-                                                Log.e("Login", task.exception.toString())
-                                                showAlert("Nombre de usuario o contraseña incorrectos.")
-                                            } else {
-                                                Log.e("Login", "Error al iniciar sesión: ${task.exception?.message}")
-                                                showAlert("Error al iniciar sesión: ${task.exception?.message}")
-                                            }
+                                        // Guardar los datos en las preferencias compartidas
+                                        userData?.let {
+                                            prefs.putString("birthDate", userData["birthDate"] as? String)
+                                            prefs.putString("email", userData["email"] as? String)
+                                            prefs.putString("fullName", userData["fullName"] as? String)
+                                            prefs.putString("username", userData["username"] as? String)
+                                            prefs.apply()
                                         }
+                                    } else {
+                                        // El documento no existe para el usuario dado
+                                        Log.d("Login", "El documento no existe en Firestore para el usuario: $email")
                                     }
-                            } else {
-                                Log.e("Login", "Error al obtener UID del usuario")
-                                showAlert("Error al obtener información del usuario.")
-                            }
+                                }
+                                .addOnFailureListener { exception ->
+                                    // Error al obtener los datos de Firestore
+                                    Log.e("Login", "Error al obtener datos de Firestore: ", exception)
+                                }
+                            Log.d("Login", "Inicio de sesión exitoso")
+                            showMain()
                         } else {
-                            Log.d("Login", "Usuario no encontrado")
-                            showAlert("Nombre de usuario o contraseña incorrectos.")
+                            if (task.exception is FirebaseAuthInvalidCredentialsException) {
+                                Log.e("Login", task.exception.toString())
+                                showAlert("Correo electrónico o contraseña incorrectos.")
+                            } else {
+                                Log.e("Login", "Error al iniciar sesión: ${task.exception?.message}")
+                                showAlert("Error al iniciar sesión: ${task.exception?.message}")
+                            }
                         }
-                    }
-                    .addOnFailureListener { exception ->
-                        Log.e("Login", "Error al verificar las credenciales: ${exception.message}")
-                        showAlert("Error al verificar las credenciales: ${exception.message}")
                     }
             } else {
                 showAlert("Rellena todos los campos por favor")
             }
         }
+
 
 
 
