@@ -10,6 +10,7 @@ import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
+import android.widget.Toast.LENGTH_LONG
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -55,6 +56,10 @@ class MoviesInListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val addMovie = view.findViewById<Button>(R.id.moviesInList_addMovieBtn)
+        if (arguments?.getString(ARG_FRAGMENT_PREV) == "ExpertListsFragment") {
+            addMovie.visibility = View.INVISIBLE
+        }
         setup()
     }
 
@@ -68,10 +73,80 @@ class MoviesInListFragment : Fragment() {
         if (currentUserEmail != null && listId != null) {
             if (arguments?.getString(ARG_FRAGMENT_PREV) == "ListsFragment"){
                 fetchDocument(currentUserEmail,listId)
-            }else {
+            }else if (arguments?.getString(ARG_FRAGMENT_PREV) == "PopularMovies") {
                 fetchDocument(listId)
+            } else {
+                fetchDocumentExpert(listId)
             }
         }
+    }
+
+    private fun fetchDocumentExpert(desiredListId: String) {
+        val docRef = firestore.collection("lists").document("ListasExpertos")
+
+        docRef.get()
+            .addOnSuccessListener { document ->
+                Log.d("MovieInListFragment", document.toString())
+                if (document.exists()) {
+                    val data = document.data
+                    if (data != null) {
+                        data.forEach { (key, value) ->
+                            val listData = value as? Map<*, *>
+                            val listId = listData?.get("listId").toString()
+                            val listName = listData?.get("listName") as? String
+                            val listDescription = listData?.get("listDescription") as? String
+
+                            if (listId == desiredListId) {
+                                val listMovies =
+                                    listData?.get("listMovies") as? List<Map<String, Any>>?
+                                val listedMovies = listMovies?.map { movie ->
+                                    val averageVote = movie["averageVote"].toString().toDouble()
+                                    val movieId = movie["id"].toString().toInt()
+                                    val moviePosterPath = movie["poster_path"] as? String ?: ""
+                                    val releaseDate = movie["releaseDate"] as? String ?: ""
+                                    val title = movie["title"] as? String ?: ""
+
+                                    ListedMovie(
+                                        title,
+                                        moviePosterPath,
+                                        releaseDate,
+                                        averageVote,
+                                        movieId
+                                    )
+                                }?.toMutableList()
+
+                                listedMovies?.forEachIndexed { index, listedMovie ->
+                                    Log.d("ListActivity", "  Movie $index:")
+                                    Log.d("ListActivity", "    movieId: ${listedMovie.id}")
+                                    Log.d("ListActivity", "    title: ${listedMovie.title}")
+                                    Log.d(
+                                        "ListActivity",
+                                        "    releaseDate: ${listedMovie.releaseDate}"
+                                    )
+                                    Log.d(
+                                        "ListActivity",
+                                        "    averageVote: ${listedMovie.averageVote}"
+                                    )
+                                }
+
+                                // Inicialización de información de lista y recycler view
+
+                                if (listName != null && listDescription != null) {
+                                    initListInfo(listName, listDescription)
+                                }
+
+                                if (listedMovies != null) {
+                                    initRv(listedMovies)
+                                }
+
+                            }
+                        }
+                    }
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.d("ListActivity", "Error al obtener el documento: $exception")
+            }
     }
 
     private fun fetchDocument(desiredListId: String) {
@@ -193,14 +268,14 @@ class MoviesInListFragment : Fragment() {
     }
 
     private fun initRv(listedMovies: MutableList<ListedMovie>){
+        Log.d("ListActivity",listedMovies.toString())
         rootView?.findViewById<ProgressBar>(R.id.moviesInList_progressCircle)?.visibility = View.GONE
 
         val rv = rootView?.findViewById<RecyclerView>(R.id.moviesInList_moviesRecyclerView)
         rv?.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
         rv?.adapter = MoviesInListAdapter(
-            listedMovies,
-
+            arguments?.getString(ARG_FRAGMENT_PREV),listedMovies,
             onMovieClick = {
             val fragmentManager = requireActivity().supportFragmentManager
             val transaction = fragmentManager.beginTransaction()
@@ -212,26 +287,31 @@ class MoviesInListFragment : Fragment() {
             isDeleteable = true,
 
             onDeleteMovie = {
-                val builder = AlertDialog.Builder(requireContext())
-                builder.setTitle("Confirmar")
-                builder.setMessage("¿Estás seguro de que quieres eliminar ${it.title} de la lista?")
+                arguments?.getString(ARG_FRAGMENT_PREV)?.let { it1 -> Log.d("FragmentPrev", it1) }
+                if (arguments?.getString(ARG_FRAGMENT_PREV) == "ExpertListsFragment") {
+                    Toast.makeText(requireContext(),"No puedes eliminar una película de una lista de expertos!", LENGTH_LONG).show()
+                } else {
+                    val builder = AlertDialog.Builder(requireContext())
+                    builder.setTitle("Confirmar")
+                    builder.setMessage("¿Estás seguro de que quieres eliminar ${it.title} de la lista?")
 
-                builder.setPositiveButton("Si") {_, _ ->
-                    if (arguments?.getString(ARG_FRAGMENT_PREV) == "ListsFragment"){
-                        deleteMovieFromFirestore(it.id)
-                    }else {
-                        deleteMovieFromFirestorePopular(it.id)
+                    builder.setPositiveButton("Si") {_, _ ->
+                        if (arguments?.getString(ARG_FRAGMENT_PREV) == "ListsFragment"){
+                            deleteMovieFromFirestore(it.id)
+                        }else if (arguments?.getString(ARG_FRAGMENT_PREV) == "PopularMovies"){
+                            deleteMovieFromFirestorePopular(it.id)
+                        }
+                        val adapter = rv?.adapter as? MoviesInListAdapter
+                        adapter?.deleteItemByMovieId(it.id)
                     }
-                    val adapter = rv?.adapter as? MoviesInListAdapter
-                    adapter?.deleteItemByMovieId(it.id)
+
+                    builder.setNegativeButton("No") {_, _ ->
+
+                    }
+
+                    val alertDialog = builder.create()
+                    alertDialog.show()
                 }
-
-                builder.setNegativeButton("No") {_, _ ->
-
-                }
-
-                val alertDialog = builder.create()
-                alertDialog.show()
             }
         )
     }

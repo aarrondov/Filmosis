@@ -144,8 +144,11 @@ class MoviesSearchedFragment : Fragment() {
                 Log.d("MovieInListFragment arg: ",arguments?.getString(ARG_FRAGMENT_PREV).toString())
                 if (arguments?.getString(ARG_FRAGMENT_PREV) == "ListsFragment"){
                     listId?.let { addMovieToList(movie, it) }
+                }else if(arguments?.getString(ARG_FRAGMENT_PREV) == "ExpertListsFragment"){
+                    listId?.let { addMovieToListExpert(movie, it)}
                 }else {
                     listId?.let { addMovieToListPopular(movie, it)}
+
                 }
             }
             .setNegativeButton("Cancelar") { dialog, _ ->
@@ -206,6 +209,48 @@ class MoviesSearchedFragment : Fragment() {
 
     private fun addMovieToListPopular(movie: Movie, desiredListId: String) {
         val listsRef = FirebaseInitializer.firestoreInstance.collection("lists").document("ListasPopulares")
+        Log.d("MovieInListFragment","Añadiendo peli a populares")
+
+        listsRef
+            .get()
+            .addOnSuccessListener { document ->
+                val data = document.data
+
+                data?.forEach { (key, value) ->
+                    val listData = value as? Map<*, *>
+                    val listId = listData?.get("listId").toString()
+
+                    if (listId == desiredListId) {
+                        val moviesList = document.get("lista_$listId.listMovies") as? MutableList<Map<String, Any>>
+
+                        moviesList?.add(
+                            mapOf(
+                                "id" to movie.id,
+                                "title" to movie.title,
+                                "poster_path" to movie.poster_path,
+                                "releaseDate" to movie.release_date,
+                                "averageVote" to movie.vote_average
+                            )
+                        )
+
+                        listsRef.update("lista_$listId.listMovies", moviesList)
+                            .addOnSuccessListener {
+                                requireActivity().onBackPressedDispatcher.onBackPressed()
+                            }
+                            .addOnFailureListener { exception ->
+                                handleAddMovieToListError(exception)
+                            }
+                    }
+                }
+
+            }
+            .addOnFailureListener { exception ->
+                Log.d("bruh", "Error fetching lists: $exception")
+            }
+    }
+
+    private fun addMovieToListExpert(movie: Movie, desiredListId: String) {
+        val listsRef = FirebaseInitializer.firestoreInstance.collection("lists").document("ListasExpertos")
         Log.d("MovieInListFragment","Añadiendo peli a populares")
 
         listsRef

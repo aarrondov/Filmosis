@@ -23,12 +23,14 @@ import java.util.UUID
 class CreateListFragment : DialogFragment() {
 
     private val firestore = FirebaseInitializer.firestoreInstance
+    private var previousFragmentTag: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        previousFragmentTag = arguments?.getString("previousFragmentTag")
         return inflater.inflate(R.layout.fragment_create_list, container, false)
     }
 
@@ -79,7 +81,12 @@ class CreateListFragment : DialogFragment() {
         )
 
         // Obtener la referencia al documento usando el email como ID
-        val docRef = firestore.collection("lists").document(email)
+        val docRef = if (previousFragmentTag == null) {
+
+            firestore.collection("lists").document(email)
+        }else {
+            firestore.collection("lists").document("ListasExpertos")
+        }
 
         // Agregar los campos adicionales al documento existente usando update()
         docRef.update(listaDatosAdicionales)
