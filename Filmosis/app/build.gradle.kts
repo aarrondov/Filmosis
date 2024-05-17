@@ -95,6 +95,10 @@ dependencies {
     //Firebase Storage
     implementation("com.google.firebase:firebase-storage-ktx:20.3.0")
 
+    implementation("com.google.firebase:firebase-auth-ktx")
+
+    implementation("com.google.android.gms:play-services-auth:20.7.0")
+
     //okhttp
     implementation("com.squareup.okhttp3:okhttp:4.9.2")
 

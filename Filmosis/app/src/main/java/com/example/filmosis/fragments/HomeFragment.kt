@@ -15,6 +15,8 @@ import android.widget.PopupMenu
 import android.widget.ScrollView
 import android.widget.SearchView
 import android.widget.TextView
+import android.widget.Toast
+import android.widget.Toast.LENGTH_SHORT
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -100,12 +102,8 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setup(view)
-        val buttonNotify: Button = view.findViewById(R.id.buttonNotify)
 
 
-        buttonNotify.setOnClickListener {
-            scheduleNotification("Título","Descripcion")
-        }
         // Creando canal
 //        val channelName = "filmosis"
 //
@@ -147,6 +145,9 @@ class HomeFragment : Fragment() {
 //        }
 
 
+
+
+
     }
 
     private fun scheduleNotification(titulo: String, descripcion: String) {
@@ -162,6 +163,7 @@ class HomeFragment : Fragment() {
         alarmManager.setExact(AlarmManager.RTC_WAKEUP,Calendar.getInstance().timeInMillis + 7000,pendingIntent)
         Log.d("Notification","Notification set")
     }
+
 
     fun createChannel(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
@@ -287,13 +289,17 @@ class HomeFragment : Fragment() {
             val fragmentManager = requireActivity().supportFragmentManager
             val transaction = fragmentManager.beginTransaction()
             val nuevoFragmento = VerTodoFragment()
+
+            // Crear un Bundle con los argumentos
+            val bundle = Bundle()
+            bundle.putInt("scrollTargetId", R.id.tvRecomendados)
+            nuevoFragmento.arguments = bundle
+
             transaction.replace(R.id.fragmentContainerView, nuevoFragmento)
             transaction.addToBackStack(null)
             transaction.commit()
-//            scrollToSection(tvRecom)
-
-
         }
+
 
         val button : MaterialButton = view.findViewById(R.id.buttonShowAllProximamente)
         button.setOnClickListener {

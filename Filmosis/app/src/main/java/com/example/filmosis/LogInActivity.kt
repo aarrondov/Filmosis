@@ -2,6 +2,7 @@ package com.example.filmosis
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
@@ -41,7 +42,7 @@ class LogInActivity : AppCompatActivity() {
                 FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
-                            val docRef = firestore.collection("lists").document("ListasPopulares")
+                            val docRef = firestore.collection("users").document(email)
                             docRef.get()
                                 .addOnSuccessListener { documentSnapshot ->
                                     if (documentSnapshot.exists()) {
@@ -50,11 +51,24 @@ class LogInActivity : AppCompatActivity() {
 
                                         // Guardar los datos en las preferencias compartidas
                                         userData?.let {
+                                            Log.d("UserData", userData.toString())
                                             prefs.putString("birthDate", userData["birthDate"] as? String)
                                             prefs.putString("email", userData["email"] as? String)
                                             prefs.putString("fullName", userData["fullName"] as? String)
                                             prefs.putString("username", userData["username"] as? String)
                                             prefs.apply()
+                                            val prefsRead = getSharedPreferences(getString(R.string.prefs_file),Context.MODE_PRIVATE)
+                                            val username = prefsRead.getString("username",null)
+                                            Log.d("Login",username.toString())
+                                            val prefs2: SharedPreferences = applicationContext.getSharedPreferences("com.example.filmosis.PREFERENCE_FILE_KEY", Context.MODE_PRIVATE)
+                                            // Itera sobre todas las entradas en el archivo de preferencias
+                                            val keys: Map<String, *> = prefs2.all
+                                            Log.d("Preferencias",keys.size.toString())
+                                            for ((key, value) in keys) {
+                                                Log.d("Preferencias", "$key : $value")
+                                            }
+                                            Log.d("Login", "Inicio de sesión exitoso")
+                                            showMain()
                                         }
                                     } else {
                                         // El documento no existe para el usuario dado
@@ -65,8 +79,6 @@ class LogInActivity : AppCompatActivity() {
                                     // Error al obtener los datos de Firestore
                                     Log.e("Login", "Error al obtener datos de Firestore: ", exception)
                                 }
-                            Log.d("Login", "Inicio de sesión exitoso")
-                            showMain()
                         } else {
                             if (task.exception is FirebaseAuthInvalidCredentialsException) {
                                 Log.e("Login", task.exception.toString())

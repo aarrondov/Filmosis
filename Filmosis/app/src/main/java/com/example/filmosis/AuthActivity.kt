@@ -3,6 +3,7 @@ package com.example.filmosis
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import androidx.activity.result.contract.ActivityResultContracts
@@ -28,6 +29,7 @@ class AuthActivity : AppCompatActivity() {
 
     private val startGoogleSignInActivityForResult =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            Log.d("AuthLog",result.resultCode.toString())
             if (result.resultCode == RESULT_OK) {
                 val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
                 try {
@@ -58,7 +60,7 @@ class AuthActivity : AppCompatActivity() {
         val email = prefs.getString("email", null)
         val provider = prefs.getString("provider", null)
 
-        if (email != null && provider != null) {
+        if (email != null) {
             findViewById<ConstraintLayout>(R.id.mainLayout).visibility = View.INVISIBLE
             showMain()
         }

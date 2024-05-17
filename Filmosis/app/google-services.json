@@ -1,18 +1,32 @@
 {
   "project_info": {
     "project_number": "383558741656",
+    "firebase_url": "https://filmosis-3f973-default-rtdb.firebaseio.com",
     "project_id": "filmosis-3f973",
     "storage_bucket": "filmosis-3f973.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:383558741656:android:496e2f467a91cf3c3caaed",
+        "mobilesdk_app_id": "1:383558741656:android:6acdfbf0dff163023caaed",
         "android_client_info": {
           "package_name": "com.example.filmosis"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "383558741656-t438d7nm8vguo5b2t43ec89ulgunahi3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.filmosis",
+            "certificate_hash": "6882ab0cdfcac62731abb6afbe9d91f969246283"
+          }
+        },
+        {
+          "client_id": "383558741656-j89oaq4etmfpkg6s4pocgt12rl4s3bgn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBDcQx898RPCETiV6_gTWHA75wJ0_LK9ec"
@@ -20,7 +34,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "383558741656-j89oaq4etmfpkg6s4pocgt12rl4s3bgn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

@@ -1,6 +1,4 @@
 import android.content.Context
-import androidx.fragment.app.testing.FragmentScenario
-import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.action.ViewActions
@@ -13,12 +11,10 @@ import org.junit.Test
 
 class ExploreFragmentTest {
 
-    private lateinit var scenario: FragmentScenario<ExploreFragment>
 
     @Before
     fun setup() {
         val context: Context = ApplicationProvider.getApplicationContext()
-        scenario = launchFragmentInContainer(themeResId = R.style.Theme_Filmosis)
     }
 
     @Test

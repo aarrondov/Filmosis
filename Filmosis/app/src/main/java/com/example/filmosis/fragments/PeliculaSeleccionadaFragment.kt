@@ -1,7 +1,9 @@
 package com.example.filmosis.fragments
 
 import android.annotation.SuppressLint
+import android.app.AlarmManager
 import android.app.AlertDialog
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -28,6 +30,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SnapHelper
+import com.example.filmosis.AlarmNotification
+import com.example.filmosis.AlarmNotification.Companion.NOTIFICATION_ID
 import com.example.filmosis.R
 import com.example.filmosis.adapters.ActoresAdapter
 import com.example.filmosis.adapters.PersonasAdapter
@@ -42,6 +46,7 @@ import com.example.filmosis.init.FirebaseInitializer
 import java.io.ByteArrayOutputStream
 import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Date
 import java.util.Locale
 
 /**
@@ -156,8 +161,69 @@ class PeliculaSeleccionadaFragment : Fragment() {
         textNodispAlq= view.findViewById(R.id.textNoDisponibleAlquiler)
         textNodispSubs = view.findViewById(R.id.textNoDisponible)
 
+        val buttonNotify = view.findViewById<ImageButton>(R.id.buttonNotify)
+
+        buttonNotify.setOnClickListener {
+            scheduleNotification("Atención","Hoy se estrena ${recuperacionInfo.title}","2024-05-17")
+            scheduleNotification("Atención","Hoy se estrena ${recuperacionInfo.title}")
+        }
+
+
+
         return view
 
+    }
+
+    private fun scheduleNotification(titulo: String, descripcion: String, fecha: String) {
+        // Parsear la fecha en formato yyyy-MM-dd
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val date: Date = dateFormat.parse(fecha)
+
+        // Configurar el Calendar a las 0:00 de la fecha dada
+        val calendar = Calendar.getInstance()
+        calendar.time = date
+        calendar.set(Calendar.HOUR_OF_DAY, 0)
+        calendar.set(Calendar.MINUTE, 0)
+        calendar.set(Calendar.SECOND, 0)
+        calendar.set(Calendar.MILLISECOND, 0)
+
+        // Crear el Intent para la notificación
+        val intent = Intent(requireContext().applicationContext, AlarmNotification::class.java).apply {
+            putExtra("title", titulo)
+            putExtra("content", descripcion)
+        }
+
+        // Crear el PendingIntent para la alarma
+        val pendingIntent = PendingIntent.getBroadcast(
+            requireContext().applicationContext,
+            NOTIFICATION_ID,
+            intent,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
+
+        // Configurar el AlarmManager para disparar la alarma en la fecha dada a las 0:00
+        val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        alarmManager.setExact(
+            AlarmManager.RTC_WAKEUP,
+            calendar.timeInMillis,
+            pendingIntent
+        )
+
+        Log.d("Notification", "Notification set for ${dateFormat.format(calendar.time)} at 00:00")
+    }
+
+    private fun scheduleNotification(titulo: String, descripcion: String) {
+        val intent = Intent(requireContext().applicationContext,AlarmNotification::class.java)
+        intent.putExtra("title",titulo)
+        intent.putExtra("content",descripcion)
+        val pendingIntent = PendingIntent.getBroadcast(
+            requireContext().applicationContext,
+            NOTIFICATION_ID,
+            intent,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+        val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP,Calendar.getInstance().timeInMillis + 7000,pendingIntent)
+        Log.d("Notification","Notification set")
     }
 
     /**
@@ -333,7 +399,7 @@ class PeliculaSeleccionadaFragment : Fragment() {
         // Ocultar la vista de notificaciones si la fecha de lanzamiento es anterior a la actual
         val releaseDate = recuperacionInfo.release_date
         if (releaseDate > getCurrentDate()) {
-            view.findViewById<ImageView>(R.id.notifications).setImageResource(R.drawable.baseline_notifications_active_24)
+            view.findViewById<ImageView>(R.id.buttonNotify).setImageResource(R.drawable.baseline_notifications_active_24)
         }
         shareFilm = view.findViewById(R.id.shareMovie)
         shareFilm.setOnClickListener {

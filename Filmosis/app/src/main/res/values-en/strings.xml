@@ -54,8 +54,8 @@
     <string name="guardar">SAVE</string>
     <string name="a_adir_pel_cula">ADD FILM +</string>
     <string name="atras">back</string>
-    <string name="peliculas_populares">POPULAR MOVIES</string>
-    <string name="peliculas_recomendadas">RECOMMENDED MOVIES</string>
+    <string name="peliculas_populares">Popular movies</string>
+    <string name="peliculas_recomendadas">Recommended movies</string>
     <string name="cambiar_contrase_a">CHANGE PASSWORD</string>
     <string name="reestablecer_contrase_a">RESET PASSWORD</string>
     <string name="cerrar_sesi_n">LOG OUT</string>
@@ -83,5 +83,16 @@
     <string name="puntuacion_media">"Average vote: "</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
+    <string name="select_help_topic">Select a topic</string>
+    <string name="subject_hint">Subject</string>
+    <string name="message_hint">Message body…</string>
+    <string name="send_button_label">Send</string>
+    <string name="bug_error">Bug/Error</string>
+    <string name="assistance">Assistance</string>
+    <string name="suggestion">Suggesting</string>
+    <string name="help">Help &amp; feedback</string>
+    <string name="fill">Fill every field, please.</string>
+    <string name="listas_de_nuestros_expertos">Our experts list</string>
+    <string name="listas_de_expertos">Our experts lists</string>
 
 </resources>

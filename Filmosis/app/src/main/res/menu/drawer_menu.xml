@@ -7,7 +7,17 @@
         android:title="@string/drawerMenu_myLists" />
 
     <item
+        android:id="@+id/drawerMenu_expertLists"
+        android:icon="@drawable/movie_open_star"
+        android:title="@string/listas_de_expertos" />
+
+    <item
         android:id="@+id/drawerMenu_popularLists"
         android:icon="@drawable/ic_movie_creation_24"
         android:title="@string/listas_populares" />
+
+    <item
+        android:id="@+id/drawerMenu_help"
+        android:icon="@drawable/face_agent"
+        android:title="@string/help" />
 </menu>

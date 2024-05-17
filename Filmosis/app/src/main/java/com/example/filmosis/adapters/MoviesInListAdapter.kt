@@ -1,5 +1,6 @@
 package com.example.filmosis.adapters
 
+import android.opengl.Visibility
 import android.util.Log
 import android.view.ContextMenu
 import android.view.LayoutInflater
@@ -18,7 +19,7 @@ import com.example.filmosis.data.model.tmdb.Movie
 import com.example.filmosis.dataclass.ListedMovie
 import com.example.filmosis.utilities.tmdb.TmdbData
 
-class MoviesInListAdapter(private val movies: MutableList<ListedMovie>, private val onMovieClick: (ListedMovie) -> Unit, private val isDeleteable: Boolean = false, private val onDeleteMovie: (ListedMovie) -> Unit = {}): RecyclerView.Adapter<MoviesInListAdapter.MovieRowViewHolder>() {
+class MoviesInListAdapter(private val previousFragment:String?,private val movies: MutableList<ListedMovie>, private val onMovieClick: (ListedMovie) -> Unit, private val isDeleteable: Boolean = false, private val onDeleteMovie: (ListedMovie) -> Unit = {}): RecyclerView.Adapter<MoviesInListAdapter.MovieRowViewHolder>() {
     class MovieRowViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnCreateContextMenuListener {
         val movieName : TextView = itemView.findViewById(R.id.itemMovieSearched_movieName)
         val moviePoster: ImageView = itemView.findViewById(R.id.itemMovieSearched_imagePoster)
@@ -58,6 +59,10 @@ class MoviesInListAdapter(private val movies: MutableList<ListedMovie>, private 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieRowViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_movie_searched, parent, false)
+        val delete = view.findViewById<ImageButton>(R.id.itemMovieSearched_deleteButton)
+        if (previousFragment == "ExpertListsFragment") {
+            delete.visibility = View.INVISIBLE
+        }
         view.setOnCreateContextMenuListener { menu, v, menuInfo ->
             val activity = view.context as? MainActivity
             activity?.menuInflater?.inflate(R.menu.movie_row_menu, menu)
@@ -88,7 +93,7 @@ class MoviesInListAdapter(private val movies: MutableList<ListedMovie>, private 
 
         holder.movieName.text = movie.title
 
-        holder.movieVoteAverage.text = holder.itemView.context.getString(R.string.puntuacion_media) + movie.releaseDate
+        holder.movieVoteAverage.text = holder.itemView.context.getString(R.string.puntuacion_media) + movie.averageVote
         holder.movieDate.text = holder.itemView.context.getString(R.string.fecha_lanzamiento) + movie.releaseDate
 
 

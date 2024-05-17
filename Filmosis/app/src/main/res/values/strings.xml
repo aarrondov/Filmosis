@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Filmosis</string>
     <string name="prefs_file" translatable="false">com.example.filmosis.PREFERENCE_FILE_KEY</string>
-    <string name="default_web_client_id" translatable="false">383558741656-j89oaq4etmfpkg6s4pocgt12rl4s3bgn.apps.googleusercontent.com</string>
+    <string name="default_web_client_id" translatable="false">383558741656-vm5292377bunatdck9fkujfiu4hi9nuj.apps.googleusercontent.com</string>
     <string name="page_home">Inicio</string>
     <string name="page_explore">Explorar</string>
     <string name="page_user">Perfil</string>
@@ -56,8 +56,8 @@
     <string name="guardar">GUARDAR</string>
     <string name="a_adir_pel_cula">AÑADIR PELÍCULA +</string>
     <string name="atras">atrás</string>
-    <string name="peliculas_populares">PELICULAS POPULARES</string>
-    <string name="peliculas_recomendadas">PELICULAS RECOMENDADAS</string>
+    <string name="peliculas_populares">Películas populares</string>
+    <string name="peliculas_recomendadas">Películas recomendadas</string>
     <string name="cambiar_contrase_a">CAMBIAR CONTRASEÑA</string>
     <string name="reestablecer_contrase_a">REESTABLECER CONTRASEÑA</string>
     <string name="cerrar_sesi_n">CERRAR SESIÓN</string>
@@ -87,5 +87,16 @@
     <string name="puntuacion_media">"Puntuación media: "</string>
     <string name="email">Correo</string>
     <string name="password">Contraseña</string>
+    <string name="select_help_topic">Selecciona un tema</string>
+    <string name="subject_hint">Asunto</string>
+    <string name="message_hint">Cuerpo del mensaje</string>
+    <string name="send_button_label">Enviar</string>
+    <string name="bug_error">Bug/Error</string>
+    <string name="assistance">Asistencia</string>
+    <string name="suggestion">Sugerencia</string>
+    <string name="help">Ayuda y feedback</string>
+    <string name="fill">Rellena todos los campos, por favor.</string>
+    <string name="listas_de_nuestros_expertos">Listas de nuestros expertos</string>
+    <string name="listas_de_expertos">Listas de expertos</string>
 
 </resources>

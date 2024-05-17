@@ -4,10 +4,12 @@ package com.example.filmosis.fragments
 
 import android.os.Bundle
 import android.os.Parcelable
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.ScrollView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -53,6 +55,25 @@ class VerTodoFragment : Fragment() {
         val buttonVolver: ImageButton = view.findViewById(R.id.goBack)
         buttonVolver.setOnClickListener {
             parentFragmentManager.popBackStack()
+        }
+
+        val scrollTargetId = arguments?.getInt("scrollTargetId")
+        Log.d("VerTodoFragment", "Received scrollTargetId: $scrollTargetId")
+
+        if (scrollTargetId != null) {
+            val scrollView: ScrollView = view.findViewById(R.id.scrollViewVerTodo)
+            val targetView: View = view.findViewById(scrollTargetId)
+
+            // Registrar el objetivo del scroll
+            Log.d("VerTodoFragment", "Scrolling to view with ID: $scrollTargetId")
+
+            // Realizar el scroll después de que la vista se haya renderizado
+            scrollView.post {
+                Log.d("VerTodoFragment", "Performing smooth scroll to target view")
+                scrollView.smoothScrollTo(0, targetView.top)
+            }
+        } else {
+            Log.d("VerTodoFragment", "scrollTargetId is null")
         }
 
         return view

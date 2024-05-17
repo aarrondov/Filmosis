@@ -39,7 +39,7 @@ class AlarmNotification : BroadcastReceiver() {
             .setSmallIcon(R.drawable.logofilmosispremium)
             .setContentTitle(title)
             .setContentText(description)
-            .setStyle(NotificationCompat.BigTextStyle().bigText("Hoy se estrena la película que querías."))
+            .setStyle(NotificationCompat.BigTextStyle().bigText(description))
             .setPriority(NotificationManagerCompat.IMPORTANCE_HIGH)
             .setContentIntent(pendingIntent)
             .build()

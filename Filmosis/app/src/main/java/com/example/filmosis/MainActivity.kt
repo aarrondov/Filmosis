@@ -18,7 +18,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.bumptech.glide.Glide
+import com.example.filmosis.fragments.ExpertListsFragment
 import com.example.filmosis.fragments.ExploreFragment
+import com.example.filmosis.fragments.HelpFragment
 import com.example.filmosis.fragments.HomeFragment
 import com.example.filmosis.fragments.ListsFragment
 import com.example.filmosis.fragments.PopularListsFragment
@@ -182,6 +184,22 @@ class MainActivity : AppCompatActivity() {
                     val currentFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView)
                     if (currentFragment?.tag != "POPULAR_LISTS_FRAGMENT") {
                         replaceFragment(PopularListsFragment(),"POPULAR_LISTS_FRAGMENT")
+                    }
+                    drawerLayout.close()
+                    return@setNavigationItemSelectedListener true
+                }
+                R.id.drawerMenu_expertLists -> {
+                    val currentFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView)
+                    if (currentFragment?.tag != "POPULAR_LISTS_FRAGMENT") {
+                        replaceFragment(ExpertListsFragment(),"EXPERT_LISTS_FRAGMENT")
+                    }
+                    drawerLayout.close()
+                    return@setNavigationItemSelectedListener true
+                }
+                R.id.drawerMenu_help -> {
+                    val currentFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView)
+                    if (currentFragment?.tag != "HELP_FRAGMENT") {
+                        replaceFragment(HelpFragment(),"HELP_FRAGMENT")
                     }
                     drawerLayout.close()
                     return@setNavigationItemSelectedListener true
