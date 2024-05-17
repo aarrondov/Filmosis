@@ -174,6 +174,8 @@ class MainActivity : AppCompatActivity() {
             when (it.itemId) {
                 R.id.drawerMenu_myLists -> {
                     val currentFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView)
+                    currentFragment?.tag?.let { it1 -> Log.d("drawerMenu", it1) }
+
                     if (currentFragment?.tag != "LISTS_FRAGMENT") {
                         replaceFragment(ListsFragment(),"LISTS_FRAGMENT")
                     }
@@ -182,6 +184,8 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.drawerMenu_popularLists -> {
                     val currentFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView)
+                    currentFragment?.tag?.let { it1 -> Log.d("drawerMenu", it1) }
+
                     if (currentFragment?.tag != "POPULAR_LISTS_FRAGMENT") {
                         replaceFragment(PopularListsFragment(),"POPULAR_LISTS_FRAGMENT")
                     }
@@ -190,7 +194,9 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.drawerMenu_expertLists -> {
                     val currentFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView)
-                    if (currentFragment?.tag != "POPULAR_LISTS_FRAGMENT") {
+                    currentFragment?.tag?.let { it1 -> Log.d("drawerMenu", it1) }
+
+                    if (currentFragment?.tag != "EXPERT_LISTS_FRAGMENT") {
                         replaceFragment(ExpertListsFragment(),"EXPERT_LISTS_FRAGMENT")
                     }
                     drawerLayout.close()
@@ -198,6 +204,8 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.drawerMenu_help -> {
                     val currentFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView)
+                    currentFragment?.tag?.let { it1 -> Log.d("drawerMenu", it1) }
+
                     if (currentFragment?.tag != "HELP_FRAGMENT") {
                         replaceFragment(HelpFragment(),"HELP_FRAGMENT")
                     }

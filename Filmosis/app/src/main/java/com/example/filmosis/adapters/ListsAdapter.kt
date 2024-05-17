@@ -11,6 +11,7 @@ import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.filmosis.R
+import com.example.filmosis.config.DatosConexion
 import com.example.filmosis.dataclass.ListItem
 import com.example.filmosis.dataclass.ListedMovie
 import com.example.filmosis.utilities.firebase.FirestoreImageManager
@@ -37,8 +38,20 @@ class ListsAdapter(private val lists: MutableList<ListItem>, private val onListC
         val list = lists[position]
 
         Log.d("ListActivity",list.toString())
+        Log.d("ListActivity", list.listPoster)
 
-        Glide.with(holder.itemView.context).load(FirestoreImageManager.getTemporaryImageUri()?.toUri()).into(holder.imageView)
+        val context = holder.itemView.context
+
+        if (list.listPoster.isNotEmpty()) {
+            Glide.with(context)
+                .load(DatosConexion.TMDB_IMAGE_BASE_URL + list.listPoster)
+                .error(R.drawable.logofilmosispremium) // Drawable a mostrar en caso de error
+                .into(holder.imageView)
+        } else {
+            Glide.with(context)
+                .load(R.drawable.logofilmosispremium) // Drawable predeterminado si listPoster está vacío
+                .into(holder.imageView)
+        }
         holder.titleTextView.text = list.listTitle
         holder.descriptionTextView.text = list.listDescription
         holder.dateTextView.text = list.listCreationDate

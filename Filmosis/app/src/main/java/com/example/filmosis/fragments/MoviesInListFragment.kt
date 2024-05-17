@@ -71,9 +71,10 @@ class MoviesInListFragment : Fragment() {
         initAddMovieButton()
 
         if (currentUserEmail != null && listId != null) {
+            arguments?.getString(ARG_FRAGMENT_PREV)?.let { Log.d("MovieInListFragment", it) }
             if (arguments?.getString(ARG_FRAGMENT_PREV) == "ListsFragment"){
                 fetchDocument(currentUserEmail,listId)
-            }else if (arguments?.getString(ARG_FRAGMENT_PREV) == "PopularMovies") {
+            }else if (arguments?.getString(ARG_FRAGMENT_PREV) == "PopularListsFragment") {
                 fetchDocument(listId)
             } else {
                 fetchDocumentExpert(listId)
@@ -87,6 +88,7 @@ class MoviesInListFragment : Fragment() {
         docRef.get()
             .addOnSuccessListener { document ->
                 Log.d("MovieInListFragment", document.toString())
+
                 if (document.exists()) {
                     val data = document.data
                     if (data != null) {
@@ -298,7 +300,7 @@ class MoviesInListFragment : Fragment() {
                     builder.setPositiveButton("Si") {_, _ ->
                         if (arguments?.getString(ARG_FRAGMENT_PREV) == "ListsFragment"){
                             deleteMovieFromFirestore(it.id)
-                        }else if (arguments?.getString(ARG_FRAGMENT_PREV) == "PopularMovies"){
+                        }else if (arguments?.getString(ARG_FRAGMENT_PREV) == "PopularListsFragment"){
                             deleteMovieFromFirestorePopular(it.id)
                         }
                         val adapter = rv?.adapter as? MoviesInListAdapter

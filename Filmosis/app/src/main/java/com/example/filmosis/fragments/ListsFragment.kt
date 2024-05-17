@@ -78,8 +78,12 @@ class ListsFragment : Fragment() {
                             Log.d("ListActivity", "listDescription: ${listDescription.toString()}")
                             val listDate = listData?.get("listDate") as? String
                             Log.d("ListActivity", "listDate: ${listDate.toString()}")
+                            val listMovies = listData?.get("listMovies") as? List<Map<String, Any>>
 
-                            ListItem(listId, listName.toString(), listDescription.toString(), listDate.toString())
+                            val firstPosterPath = (listMovies?.firstOrNull()?.get("poster_path") as? String) ?: ""
+                            Log.d("ListActivity", "First movie poster path: $firstPosterPath")
+
+                            ListItem(listId, listName.toString(), listDescription.toString(), listDate.toString(),firstPosterPath)
                         }.toMutableList()
 
                         rootView?.findViewById<ProgressBar>(R.id.lists_progressCircle)?.visibility = View.GONE
@@ -106,6 +110,59 @@ class ListsFragment : Fragment() {
                 Log.d("ListActivity", "Error al obtener el documento: $exception")
             }
     }
+
+//    private fun fetchDocument(username: String) {
+//        //TMP Expertos
+//        val docRef = firestore.collection("lists").document("ListasExpertos")
+//        docRef.get()
+//            .addOnSuccessListener { document ->
+//                if (document.exists()) {
+//                    val data = document.data
+//                    if (data != null) {
+//                        val keys = data.keys.toList()
+//
+//                        val listOfLists = keys.map { key ->
+//                            val listData = data[key] as? Map<*, *>
+//                            val listId = listData?.get("listId").toString()
+//                            Log.d("ListActivity", "listId: $listId")
+//                            val listName = listData?.get("listName") as? String
+//                            Log.d("ListActivity", "listName: ${listName.toString()}")
+//                            val listDescription = listData?.get("listDescription") as? String
+//                            Log.d("ListActivity", "listDescription: ${listDescription.toString()}")
+//                            val listDate = listData?.get("listDate") as? String
+//                            Log.d("ListActivity", "listDate: ${listDate.toString()}")
+//                            val listMovies = listData?.get("listMovies") as? List<Map<String, Any>>
+//
+//                            val firstPosterPath = (listMovies?.firstOrNull()?.get("poster_path") as? String) ?: ""
+//                            Log.d("ListActivity", "First movie poster path: $firstPosterPath")
+//
+//                            ListItem(listId, listName.toString(), listDescription.toString(), listDate.toString(),firstPosterPath)
+//                        }.toMutableList()
+//
+//                        rootView?.findViewById<ProgressBar>(R.id.lists_progressCircle)?.visibility = View.GONE
+//
+//                        if (listOfLists.isEmpty()) {
+//                            rootView?.findViewById<TextView>(R.id.lists_errorTextView)?.text =
+//                                getString(
+//                                    R.string.no_lista
+//                                )
+//                        } else {
+//                            rootView?.findViewById<TextView>(R.id.lists_errorTextView)?.visibility = View.GONE
+//                            initListsRv(listOfLists)
+//                        }
+//
+//
+//                    } else {
+//                        Log.d("ListActivity", "El documento está vacío para el usuario $username.")
+//                    }
+//                } else {
+//                    Log.d("ListActivity", "No se encontró ningún documento para el usuario $username.")
+//                }
+//            }
+//            .addOnFailureListener { exception ->
+//                Log.d("ListActivity", "Error al obtener el documento: $exception")
+//            }
+//    }
 
     private fun initListsRv(lists: MutableList<ListItem>) {
         val rv = rootView?.findViewById<RecyclerView>(R.id.lists_recyclerView)

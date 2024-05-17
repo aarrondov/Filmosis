@@ -81,7 +81,11 @@ class FilmosisListsFragment : Fragment() {
                             val listDate = listData?.get("listDate") as? String
                             Log.d("ListActivity", "listDate: ${listDate.toString()}")
 
-                            ListItem(listId, listName.toString(), listDescription.toString(), listDate.toString())
+                            val listMovies = listData?.get("listMovies") as? List<Map<String, Any>>
+
+                            val firstPosterPath = (listMovies?.firstOrNull()?.get("poster_path") as? String) ?: ""
+
+                            ListItem(listId, listName.toString(), listDescription.toString(), listDate.toString(), firstPosterPath)
                         }.toMutableList()
 
                         rootView?.findViewById<ProgressBar>(R.id.lists_progressCirclePopular)?.visibility = View.GONE
@@ -129,7 +133,11 @@ class FilmosisListsFragment : Fragment() {
                             val listDate = listData?.get("listDate") as? String
                             Log.d("ListActivity", "listDate: ${listDate.toString()}")
 
-                            ListItem(listId, listName.toString(), listDescription.toString(), listDate.toString())
+                            val listMovies = listData?.get("listMovies") as? List<Map<String, Any>>
+
+                            val firstPosterPath = (listMovies?.firstOrNull()?.get("poster_path") as? String) ?: ""
+
+                            ListItem(listId, listName.toString(), listDescription.toString(), listDate.toString(), firstPosterPath)
                         }.toMutableList()
 
                         rootView?.findViewById<ProgressBar>(R.id.lists_progressCirclePopular)?.visibility = View.GONE
