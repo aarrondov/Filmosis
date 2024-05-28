@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/movieRowMenu_addTolist"
-        android:title="@string/movieRowMenu_addToList" />
 
-    <item android:id="@+id/movieRowMenu_shareMovie"
-        android:title="@string/movieRowMenu_shareMovie" />
+
+    <item android:id="@+id/movieRowMenu_shareMovieCover"
+        android:title="@string/movieRowMenu_shareMovieCover" />
 
     <item android:id="@+id/movieRowMenu_download_cover"
         android:title="@string/movieRowMenu_downloadCover" />
+
+    <item android:id="@+id/movieRowMenu_shareMovie"
+        android:title="@string/movieRowMenu_shareMovie" />
 </menu>

@@ -85,7 +85,7 @@
     <string name="listas_de_la_comunidad">Listas de la comunidad</string>
     <string name="fecha_lanzamiento">"Fecha de lanzamiento: "</string>
     <string name="puntuacion_media">"Puntuación media: "</string>
-    <string name="email">Correo</string>
+    <string name="email">Correo electrónico</string>
     <string name="password">Contraseña</string>
     <string name="select_help_topic">Selecciona un tema</string>
     <string name="subject_hint">Asunto</string>
@@ -98,5 +98,18 @@
     <string name="fill">Rellena todos los campos, por favor.</string>
     <string name="listas_de_nuestros_expertos">Listas de nuestros expertos</string>
     <string name="listas_de_expertos">Listas de expertos</string>
+    <string name="share_movie_prefix">Mira la película </string>
+    <string name="share_movie_suffix">. Compartido a través de Filmosis. Descárgala ya.</string>
+    <string name="movieRowMenu_shareMovieCover">Compartir portada</string>
+    <string name="el_video_no_est_disponible">El video no está disponible</string>
+    <string name="contrase_a_actual">Contraseña actual</string>
+    <string name="cambio_de_contrase_a">Cambio de contraseña</string>
+    <string name="ingrese_su_contrase_a_actual">Ingrese su contraseña actual</string>
+    <string name="nueva_contrase_a">Nueva contraseña</string>
+    <string name="ingrese_su_nueva_contrase_a">Ingrese su nueva contraseña</string>
+    <string name="confirmar_contrase_a">Confirmar contraseña</string>
+    <string name="confirme_su_nueva_contrase_a">Confirme su nueva contraseña</string>
+    <string name="volver">VOLVER</string>
+    <string name="confirmar">CONFIRMAR</string>
 
 </resources>

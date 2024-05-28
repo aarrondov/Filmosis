@@ -94,5 +94,18 @@
     <string name="fill">Fill every field, please.</string>
     <string name="listas_de_nuestros_expertos">Our experts list</string>
     <string name="listas_de_expertos">Our experts lists</string>
+    <string name="share_movie_prefix">Watch the film </string>
+    <string name="share_movie_suffix">. Shared using Filmosis. Download it now.</string>
+    <string name="movieRowMenu_shareMovieCover">Share cover</string>
+    <string name="el_video_no_est_disponible">Video not available</string>
+    <string name="contrase_a_actual">Actual password</string>
+    <string name="cambio_de_contrase_a">Password change</string>
+    <string name="ingrese_su_contrase_a_actual">Your current password&#8230;</string>
+    <string name="nueva_contrase_a">New password</string>
+    <string name="ingrese_su_nueva_contrase_a">Write your new password</string>
+    <string name="confirmar_contrase_a">Confirm password</string>
+    <string name="confirme_su_nueva_contrase_a">Confirm your new password</string>
+    <string name="volver">BACK</string>
+    <string name="confirmar">CONFIRM</string>
 
 </resources>

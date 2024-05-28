@@ -336,7 +336,7 @@ class PeliculaSeleccionadaFragment : Fragment() {
 
             } else {
                 val textView = view.findViewById<TextView>(R.id.errorvideo)
-                textView.text = "El video no está disponible"
+                textView.text = getString(R.string.el_video_no_est_disponible)
 
             }
         }

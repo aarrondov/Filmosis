@@ -24,7 +24,7 @@
             android:iconifiedByDefault="false"
             android:paddingHorizontal="8dp"
             android:queryBackground="@null"
-            android:queryHint="Buscar personas" />
+            android:queryHint="@string/searchFilterMenu_searchDirectors" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <androidx.recyclerview.widget.RecyclerView
